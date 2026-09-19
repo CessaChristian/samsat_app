@@ -1,0 +1,29 @@
+# --- Rahasia ---
+.env
+.env.local
+
+# --- Data pribadi pemilik kendaraan: JANGAN PERNAH di-commit ---
+samples/
+uploads_tmp/
+*.xlsx
+*.xls
+~$*
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.coverage
+*.egg-info/
+
+# --- Node / Vite ---
+node_modules/
+dist/
+.vite/
+
+# --- OS & editor ---
+.DS_Store
+.idea/
+.vscode/
