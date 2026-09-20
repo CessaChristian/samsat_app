@@ -67,3 +67,45 @@ def tulis_xlsx(
         ws.append([satu.get(nama) for nama in kolom])
     wb.save(path)
     return path
+
+
+# --- baris yang sudah lolos validasi, untuk tes penyimpanan -----------------
+
+from datetime import date  # noqa: E402
+from decimal import Decimal  # noqa: E402
+
+from app.services.validator import BarisBersih  # noqa: E402
+
+_DASAR_BERSIH: dict[str, Any] = {
+    "nomor": 2,
+    "no_polisi": "H5120GB",
+    "tgl_jatuh_tempo_pkb": date(2026, 5, 24),
+    "kecamatan": "TINGKIR",
+    "kelurahan": "KUTOWINANGUN LOR",
+    "jml_roda": 4,
+    "pkb_pokok": Decimal("6500"),
+    "pkb_denda": Decimal("500"),
+    "pkb_opsen": Decimal("4500"),
+    "pkb_denda_opsen": Decimal("500"),
+    "swdkllj": Decimal("35000"),
+    "denda_swdkllj": Decimal("8000"),
+    "nama": "RUSIYATI",
+    "alamat": "JL TIRTOYOSO I/09 RT07/IX SLTG",
+    "nm_kecamatan_asli": "TINGKIR",
+    "nm_kelurahan_asli": "KUTOWINANGUN LOR",
+    "nm_jenis_kend": "MPNP/MINIBUS",
+    "nm_merk_kend": "TOYOTA",
+    "th_buat": "2018",
+    "warna_kend": "PUTIH",
+    "warna_tnkb_kend": "PUTIH",
+    "tgl_jatuh_tempo_stnk": "24/05/2030",
+    "pnbp": Decimal("0"),
+    "total": Decimal("55000"),
+}
+
+
+def bersih(**ubahan: Any) -> BarisBersih:
+    """Satu BarisBersih yang sah, dengan kolom tertentu diubah."""
+    isi = dict(_DASAR_BERSIH)
+    isi.update(ubahan)
+    return BarisBersih(**isi)
