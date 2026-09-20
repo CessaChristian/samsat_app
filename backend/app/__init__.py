@@ -17,9 +17,11 @@ def create_app(config_object: type[Config] = Config) -> Flask:
 
     login_manager.init_app(app)
 
-    from app.controllers import auth, upload
+    from app.controllers import auth, meta, rekap, upload
 
     app.register_blueprint(auth.bp)
     app.register_blueprint(upload.bp)
+    app.register_blueprint(meta.bp)
+    app.register_blueprint(rekap.bp)
 
     return app
