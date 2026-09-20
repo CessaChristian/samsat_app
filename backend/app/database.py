@@ -8,6 +8,7 @@ lewat :func:`muat_sql`.
 Acuan: SPESIFIKASI_DASHBOARD_PKB.md bagian 2 (aturan kode).
 """
 
+import atexit
 from contextlib import contextmanager
 from functools import lru_cache
 from pathlib import Path
@@ -39,6 +40,9 @@ def pool() -> ConnectionPool:
             open=True,
             kwargs={"row_factory": dict_row},
         )
+        # Pool menjalankan thread latar. Tanpa penutupan tertib, skrip sekali
+        # jalan berakhir dengan PythonFinalizationError saat interpreter mati.
+        atexit.register(tutup_pool)
     return _pool
 
 
