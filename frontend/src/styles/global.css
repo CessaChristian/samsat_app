@@ -1,0 +1,264 @@
+/* Token desain, diambil apa adanya dari prototipe Claude Design
+   (Dashboard PKB.dc.html). Seluruh warna memakai ruang oklch dengan hue 254
+   supaya netralnya sedikit kebiruan, sama seperti prototipe.
+
+   Acuan: SPESIFIKASI_DASHBOARD_PKB.md bagian 3. */
+
+:root {
+  /* aksen */
+  --biru: oklch(0.46 0.14 254);
+  --biru-tua: oklch(0.4 0.14 254);
+  --biru-lebih-tua: oklch(0.36 0.13 254);
+  --biru-bar: oklch(0.52 0.13 254);
+  --biru-bar-muda: oklch(0.62 0.1 254);
+  --biru-latar: oklch(0.95 0.02 254);
+
+  /* teks */
+  --teks: oklch(0.24 0.012 254);
+  --teks-kuat: oklch(0.3 0.012 254);
+  --teks-sedang: oklch(0.35 0.012 254);
+  --teks-lembut: oklch(0.4 0.012 254);
+  --teks-redup: oklch(0.45 0.012 254);
+  --teks-label: oklch(0.5 0.012 254);
+  --teks-samar: oklch(0.55 0.012 254);
+  --teks-samar-2: oklch(0.58 0.012 254);
+  --teks-samar-3: oklch(0.6 0.012 254);
+
+  /* garis dan bidang */
+  --garis: oklch(0.92 0.006 254);
+  --garis-halus: oklch(0.94 0.006 254);
+  --garis-halus-2: oklch(0.95 0.006 254);
+  --garis-tipis: oklch(0.965 0.004 254);
+  --garis-input: oklch(0.91 0.008 254);
+  --garis-tombol: oklch(0.93 0.008 254);
+  --jalur-bar: oklch(0.965 0.008 254);
+  --baris-hover: oklch(0.985 0.008 254);
+  --tirai: oklch(0.3 0.02 254 / 0.32);
+
+  /* status */
+  --hijau-garis: oklch(0.86 0.07 155);
+  --hijau-latar: oklch(0.98 0.02 155);
+  --hijau-teks: oklch(0.45 0.12 155);
+  --kuning-garis: oklch(0.9 0.05 85);
+  --kuning-latar: oklch(0.99 0.012 85);
+  --kuning-teks: oklch(0.48 0.1 85);
+  --merah-garis: oklch(0.88 0.07 25);
+  --merah-latar: oklch(0.98 0.02 25);
+  --merah-teks: oklch(0.52 0.19 25);
+
+  --radius-kecil: 8px;
+  --radius: 12px;
+  --radius-besar: 14px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #fff;
+  color: var(--teks);
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  /* Angka rekapitulasi harus sejajar antar baris tabel. */
+  font-variant-numeric: tabular-nums;
+}
+
+select,
+button,
+input {
+  font-family: inherit;
+}
+
+select:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--biru);
+  outline-offset: 2px;
+}
+
+a {
+  color: var(--biru);
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--biru-lebih-tua);
+}
+
+@keyframes putar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media print {
+  [data-no-print] {
+    display: none !important;
+  }
+}
+
+/* ---------------------------------------------------------------- kerangka */
+
+.laman {
+  min-height: 100vh;
+}
+
+.kartu {
+  border: 1px solid var(--garis);
+  border-radius: var(--radius);
+  background: #fff;
+}
+
+.kartu-besar {
+  border: 1px solid var(--garis);
+  border-radius: var(--radius-besar);
+  background: #fff;
+}
+
+.judul-blok {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.keterangan {
+  font-size: 12px;
+  color: var(--teks-samar-3);
+}
+
+/* ----------------------------------------------------------------- tombol */
+
+.tombol-utama {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 15px;
+  border: none;
+  border-radius: var(--radius-kecil);
+  background: var(--biru);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tombol-utama:hover:not(:disabled) {
+  background: var(--biru-tua);
+}
+
+.tombol-utama:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.tombol-biasa {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border: 1px solid var(--garis-input);
+  border-radius: var(--radius-kecil);
+  background: #fff;
+  color: var(--teks-redup);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tombol-biasa:hover:not(:disabled) {
+  border-color: var(--teks-samar-3);
+  color: var(--teks);
+}
+
+.tombol-biasa:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ------------------------------------------------------------------ isian */
+
+.label-isian {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--teks-label);
+}
+
+.isian {
+  padding: 9px 12px;
+  border: 1px solid var(--garis-input);
+  border-radius: var(--radius-kecil);
+  background: #fff;
+  font-size: 13px;
+  color: var(--teks);
+}
+
+/* ------------------------------------------------------------------ panel */
+
+.panel-info {
+  border-radius: var(--radius);
+  padding: 15px 17px;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.panel-hijau {
+  border: 1px solid var(--hijau-garis);
+  background: var(--hijau-latar);
+  color: var(--hijau-teks);
+}
+
+.panel-kuning {
+  border: 1px solid var(--kuning-garis);
+  background: var(--kuning-latar);
+  color: var(--kuning-teks);
+}
+
+.panel-merah {
+  border: 1px solid var(--merah-garis);
+  background: var(--merah-latar);
+  color: var(--merah-teks);
+}
+
+/* --------------------------------------------------------------- kerangka
+   Keadaan "belum ada data": kartu dan grafik tampil sebagai kerangka abu. */
+
+.rangka {
+  background: linear-gradient(
+    90deg,
+    oklch(0.96 0.004 254) 25%,
+    oklch(0.93 0.006 254) 37%,
+    oklch(0.96 0.004 254) 63%
+  );
+  background-size: 400% 100%;
+  animation: rangka-geser 1.6s ease-in-out infinite;
+  border-radius: 6px;
+}
+
+@keyframes rangka-geser {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rangka {
+    animation: none;
+  }
+}
