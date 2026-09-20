@@ -21,6 +21,19 @@ const FILTER_KOSONG = {
 }
 
 /**
+ * Filter awal: periode diisi rentang penuh yang tersedia supaya kotak tanggal
+ * tidak tampil kosong. Nilainya sama dengan bawaan backend, jadi tampilan dan
+ * perhitungan tetap sejalan.
+ */
+function filterAwal(periode) {
+  return {
+    ...FILTER_KOSONG,
+    dari: periode?.awal || '',
+    sampai: periode?.akhir || '',
+  }
+}
+
+/**
  * Halaman utama. Tiga keadaan yang harus ada (bagian 3):
  *   - belum ada data  -> kerangka abu dan ajakan unggah
  *   - berisi data     -> kartu, grafik, dan tabel
@@ -55,7 +68,11 @@ export default function Dashboard({ pengguna, onKeluar }) {
       try {
         const hasilMeta = await muatMeta()
         if (batal) return
-        if (hasilMeta.ada_data) await muatRekap(FILTER_KOSONG)
+        if (hasilMeta.ada_data) {
+          const awal = filterAwal(hasilMeta.periode)
+          setFilter(awal)
+          await muatRekap(awal)
+        }
       } catch (e) {
         if (!batal) setGalat(e.message || 'Gagal memuat data.')
       } finally {
@@ -88,7 +105,10 @@ export default function Dashboard({ pengguna, onKeluar }) {
     setFilter((lama) => ({ ...lama, ...bagian }))
   }, [])
 
-  const resetFilter = useCallback(() => setFilter(FILTER_KOSONG), [])
+  const resetFilter = useCallback(
+    () => setFilter(filterAwal(meta?.periode)),
+    [meta?.periode],
+  )
 
   async function setelahTersimpan(hasilSimpan) {
     setModalBuka(false)
@@ -99,8 +119,9 @@ export default function Dashboard({ pengguna, onKeluar }) {
     )
     try {
       const hasilMeta = await muatMeta()
-      setFilter(FILTER_KOSONG)
-      if (hasilMeta.ada_data) await muatRekap(FILTER_KOSONG)
+      const awal = filterAwal(hasilMeta.periode)
+      setFilter(awal)
+      if (hasilMeta.ada_data) await muatRekap(awal)
     } catch (e) {
       setGalat(e.message || 'Data tersimpan, tetapi dashboard gagal dimuat ulang.')
     } finally {
@@ -179,6 +200,7 @@ export default function Dashboard({ pengguna, onKeluar }) {
             onReset={resetFilter}
             wilayah={meta.wilayah}
             batasPeriode={meta.periode}
+            filterBawaan={filterAwal(meta.periode)}
             periodeAktif={rekap?.periode}
             mode={modePeriode}
             onUbahMode={setModePeriode}

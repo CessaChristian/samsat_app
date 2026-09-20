@@ -59,6 +59,7 @@ export default function BilahFilter({
   periodeAktif,
   mode,
   onUbahMode,
+  filterBawaan,
 }) {
   const kelurahanTersedia = useMemo(() => {
     if (!filter.kecamatan) return wilayah.flatMap((w) => w.kelurahan)
@@ -66,8 +67,11 @@ export default function BilahFilter({
     return cocok ? cocok.kelurahan : []
   }, [wilayah, filter.kecamatan])
 
+  // Tombol Reset hanya berguna bila ada yang menyimpang dari bawaan.
   const adaFilterAktif =
-    filter.roda || filter.status || filter.kecamatan || filter.kelurahan || filter.dari || filter.sampai
+    Boolean(filter.roda || filter.status || filter.kecamatan || filter.kelurahan) ||
+    filter.dari !== (filterBawaan?.dari ?? '') ||
+    filter.sampai !== (filterBawaan?.sampai ?? '')
 
   function gantiKecamatan(nilai) {
     // Kelurahan yang tidak lagi berada di kecamatan terpilih harus dilepas,
