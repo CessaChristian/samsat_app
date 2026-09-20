@@ -18,7 +18,7 @@ TEST_DATABASE_URL = (os.environ.get("TEST_DATABASE_URL") or "").strip()
 
 #: Dikosongkan sebelum setiap tes. dim_wilayah sengaja tidak ikut: isinya
 #: master, bukan data unggahan.
-TABEL_DATA = ("kewajiban_pkb", "ingest_batch")
+TABEL_DATA = ("kewajiban_pkb", "ingest_batch", "pengguna")
 
 
 @pytest.fixture(scope="session")
@@ -66,3 +66,43 @@ def koneksi_uji(url_uji):
 
     with psycopg.connect(url_uji, row_factory=dict_row) as conn:
         yield conn
+
+
+@pytest.fixture
+def app(db, tmp_path):
+    """Aplikasi Flask yang menunjuk database uji dan folder unggahan sementara."""
+    from app import create_app
+
+    aplikasi = create_app()
+    aplikasi.config.update(
+        TESTING=True,
+        SECRET_KEY="kunci-untuk-pengujian",
+        UPLOAD_TMP_DIR=tmp_path / "uploads_tmp",
+    )
+    return aplikasi
+
+
+@pytest.fixture
+def klien(app):
+    return app.test_client()
+
+
+@pytest.fixture
+def pengguna_uji(db):
+    """Satu akun petugas untuk menguji alur login."""
+    from werkzeug.security import generate_password_hash
+
+    from app.models import pengguna as model
+
+    model.buat("petugas", generate_password_hash("rahasia123"))
+    return {"username": "petugas", "password": "rahasia123"}
+
+
+@pytest.fixture
+def klien_masuk(klien, pengguna_uji):
+    """Klien yang sudah memegang sesi petugas."""
+    klien.post(
+        "/api/auth/login",
+        json={"username": pengguna_uji["username"], "password": pengguna_uji["password"]},
+    )
+    return klien
