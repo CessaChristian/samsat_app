@@ -83,3 +83,29 @@ export function persen(nilai) {
   const teks = Number.isInteger(n) ? String(n) : n.toFixed(1)
   return `${teks.replace('.', ',')}%`
 }
+
+const BULAN_PANJANG = [
+  'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+  'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
+]
+
+/**
+ * Label periode dalam nama bulan, dipakai saat mode Bulan.
+ *   "2026-01-01","2026-08-31" -> "Januari – Agustus 2026"
+ *   "2026-08-01","2026-08-31" -> "Agustus 2026"
+ *   "2025-11-01","2026-08-31" -> "November 2025 – Agustus 2026"
+ *
+ * Nama bulan saja bisa disalahpahami sebagai bulan penuh, jadi tanggal
+ * persisnya tetap ditampilkan pada baris keterangan di bawah bilah filter
+ * (bagian 7.2).
+ */
+export function labelPeriodeBulan(dari, sampai) {
+  if (!dari || !sampai) return '—'
+  const [thnAwal, blnAwal] = String(dari).slice(0, 10).split('-').map(Number)
+  const [thnAkhir, blnAkhir] = String(sampai).slice(0, 10).split('-').map(Number)
+  const namaAwal = BULAN_PANJANG[blnAwal - 1]
+  const namaAkhir = BULAN_PANJANG[blnAkhir - 1]
+  if (thnAwal === thnAkhir && blnAwal === blnAkhir) return `${namaAwal} ${thnAwal}`
+  if (thnAwal === thnAkhir) return `${namaAwal} – ${namaAkhir} ${thnAwal}`
+  return `${namaAwal} ${thnAwal} – ${namaAkhir} ${thnAkhir}`
+}

@@ -12,6 +12,9 @@
   --biru-bar: oklch(0.52 0.13 254);
   --biru-bar-muda: oklch(0.62 0.1 254);
   --biru-latar: oklch(0.95 0.02 254);
+  /* Dipakai pemicu filter, sel bulan terpilih, dan preset aktif. */
+  --biru-latar-lembut: oklch(0.97 0.022 254);
+  --biru-garis: oklch(0.82 0.07 254);
 
   /* teks */
   --teks: oklch(0.24 0.012 254);
@@ -265,5 +268,222 @@ a:hover {
 @media (prefers-reduced-motion: reduce) {
   .rangka {
     animation: none;
+  }
+}
+
+/* ---------------------------------------------------------- pemicu filter
+   Bilah filter hanya memuat dua tombol pemicu; seluruh pilihan dipindahkan
+   ke dalam modal (lihat ModalPeriode.jsx dan ModalFilter.jsx). */
+
+.pemicu {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--garis-input);
+  border-radius: var(--radius-kecil);
+  background: #fff;
+  color: var(--teks);
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.pemicu:hover {
+  border-color: var(--biru-garis);
+}
+
+/* Keadaan terisi: pemicu periode selalu memegang nilai, pemicu filter hanya
+   bila ada saringan yang aktif. */
+.pemicu-terisi {
+  border-color: var(--biru-garis);
+  background: var(--biru-latar-lembut);
+  color: var(--biru-lebih-tua);
+}
+
+.pemicu-isi {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pemicu-tanda {
+  flex: 0 0 auto;
+  color: var(--teks-samar);
+}
+
+.pemicu-terisi .pemicu-tanda {
+  color: var(--biru);
+}
+
+/* ------------------------------------------------------ saklar Bulan/Tanggal */
+
+.segmen {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 10px;
+  background: oklch(0.955 0.006 254);
+}
+
+.segmen button {
+  padding: 7px 17px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: none;
+  color: var(--teks-redup);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.segmen button[aria-pressed='true'] {
+  border-color: var(--garis-input);
+  background: #fff;
+  color: var(--biru-lebih-tua);
+}
+
+/* ------------------------------------------------------------ preset periode */
+
+.preset {
+  display: block;
+  width: 100%;
+  padding: 11px 14px;
+  border: none;
+  border-radius: var(--radius-kecil);
+  background: none;
+  color: var(--teks-sedang);
+  font-size: 13.5px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.preset:hover {
+  background: var(--baris-hover);
+}
+
+.preset[aria-pressed='true'] {
+  background: var(--biru-latar-lembut);
+  color: var(--biru-lebih-tua);
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------- sel bulan
+   Tiga keadaan: di luar data (nonaktif), tersedia, dan termasuk rentang
+   terpilih — dengan bulan awal serta bulan akhir sebagai ujung yang pekat. */
+
+.sel-bulan {
+  height: 52px;
+  border: 1px solid var(--garis-input);
+  border-radius: var(--radius-kecil);
+  background: #fff;
+  color: var(--teks-sedang);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.sel-bulan:hover:not(:disabled) {
+  border-color: var(--biru-garis);
+}
+
+.sel-bulan-rentang {
+  border-color: transparent;
+  background: var(--biru-latar-lembut);
+  color: var(--biru-lebih-tua);
+}
+
+.sel-bulan-ujung {
+  border-color: transparent;
+  background: var(--biru);
+  color: #fff;
+  font-weight: 600;
+}
+
+.sel-bulan-ujung:hover:not(:disabled) {
+  border-color: transparent;
+  background: var(--biru-tua);
+}
+
+.sel-bulan:disabled {
+  border-color: var(--garis-tipis);
+  background: #fff;
+  color: var(--teks-samar-3);
+  cursor: not-allowed;
+}
+
+/* ----------------------------------------------------------- navigasi tahun */
+
+.tombol-bulat {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--garis-input);
+  border-radius: var(--radius-kecil);
+  background: #fff;
+  color: var(--teks-sedang);
+  cursor: pointer;
+}
+
+.tombol-bulat:hover:not(:disabled) {
+  border-color: var(--biru-garis);
+  color: var(--biru);
+}
+
+.tombol-bulat:disabled {
+  border-color: var(--garis-tipis);
+  color: var(--teks-samar-3);
+  cursor: not-allowed;
+}
+
+/* ------------------------------------------------------------ tata letak modal
+   Dua kolom pada layar lebar, menumpuk pada layar sempit. */
+
+.isi-periode {
+  display: grid;
+  grid-template-columns: 208px minmax(0, 1fr);
+}
+
+.sisi-periode {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 14px;
+  border-right: 1px solid var(--garis-halus-2);
+}
+
+.kisi-bulan {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.kisi-filter {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 20px;
+}
+
+@media (max-width: 640px) {
+  .isi-periode {
+    grid-template-columns: 1fr;
+  }
+
+  .sisi-periode {
+    border-right: none;
+    border-bottom: 1px solid var(--garis-halus-2);
+  }
+
+  .kisi-bulan {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .kisi-filter {
+    grid-template-columns: 1fr;
   }
 }

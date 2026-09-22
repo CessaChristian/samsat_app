@@ -110,6 +110,15 @@ export default function Dashboard({ pengguna, onKeluar }) {
     [meta?.periode],
   )
 
+  /**
+   * Periode dan modenya berubah bersamaan saat modal ditutup dengan
+   * "Terapkan", supaya rekap hanya dimuat ulang satu kali.
+   */
+  const terapkanPeriode = useCallback(({ mode, dari, sampai }) => {
+    setModePeriode(mode)
+    setFilter((lama) => ({ ...lama, dari, sampai }))
+  }, [])
+
   async function setelahTersimpan(hasilSimpan) {
     setModalBuka(false)
     setMemuat(true)
@@ -204,7 +213,7 @@ export default function Dashboard({ pengguna, onKeluar }) {
             filterBawaan={filterAwal(meta.periode)}
             periodeAktif={rekap?.periode}
             mode={modePeriode}
-            onUbahMode={setModePeriode}
+            onTerapkanPeriode={terapkanPeriode}
           />
 
           {rekap && (

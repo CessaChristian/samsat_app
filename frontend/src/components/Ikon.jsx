@@ -44,3 +44,36 @@ export function IkonKeluar({ ukuran = 14, ...sisa }) {
     </svg>
   )
 }
+
+export function IkonKalender({ ukuran = 16, ...sisa }) {
+  return (
+    <svg width={ukuran} height={ukuran} viewBox="0 0 24 24" {...dasar} strokeWidth={1.8} {...sisa}>
+      <rect x="3" y="5" width="18" height="16" rx="2" />
+      <path d="M3 10h18M8 3v4M16 3v4" />
+    </svg>
+  )
+}
+
+export function IkonFilter({ ukuran = 16, ...sisa }) {
+  return (
+    <svg width={ukuran} height={ukuran} viewBox="0 0 24 24" {...dasar} strokeWidth={1.8} {...sisa}>
+      <path d="M4 7h16M7 12h10M10 17h4" />
+    </svg>
+  )
+}
+
+export function IkonPanahKiri({ ukuran = 15, ...sisa }) {
+  return (
+    <svg width={ukuran} height={ukuran} viewBox="0 0 24 24" {...dasar} strokeWidth={2.2} {...sisa}>
+      <path d="M15 6l-6 6 6 6" />
+    </svg>
+  )
+}
+
+export function IkonPanahKanan({ ukuran = 15, ...sisa }) {
+  return (
+    <svg width={ukuran} height={ukuran} viewBox="0 0 24 24" {...dasar} strokeWidth={2.2} {...sisa}>
+      <path d="M9 6l6 6-6 6" />
+    </svg>
+  )
+}
