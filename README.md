@@ -170,8 +170,28 @@ Masuk memakai akun dari langkah 2.5.
 4. Klik **Simpan ke database**. Berkas divalidasi ulang dari nol, lalu
    disimpan dalam satu transaksi. Gagal di tengah berarti tidak ada yang
    tersimpan sama sekali.
-5. Dashboard dimuat ulang. Saring lewat periode, jenis kendaraan, status,
-   kecamatan, dan kelurahan. Export mengikuti filter yang sedang berlaku.
+5. Dashboard dimuat ulang. Di atas dashboard ada dua tombol penyaring:
+   - **Periode** — membuka pemilih periode dengan dua mode. Mode *Bulan*
+     memakai kisi 12 bulan (klik bulan awal lalu bulan akhir); mode *Tanggal*
+     memakai dua kotak tanggal. Tersedia juga pilihan cepat *Semua periode*,
+     *Bulan terakhir*, dan *3 bulan terakhir*. Bulan yang tidak punya data
+     tidak bisa dipilih.
+   - **Filter data** — jenis kendaraan, status, kecamatan, dan kelurahan.
+
+   Pilihan baru baru berlaku setelah **Terapkan** ditekan, jadi dashboard
+   dimuat ulang sekali, bukan pada tiap perubahan. Tombol **Reset**
+   mengembalikan semuanya ke keadaan awal.
+
+6. **Export Excel** dan **Export PDF** di bagian bawah dashboard mengunduh
+   seluruh baris detail yang lolos filter yang sedang berlaku — 21 kolom yang
+   sama persis dengan berkas dari pusat, diurutkan kecamatan, kelurahan,
+   nomor polisi, lalu tanggal jatuh tempo. Nama berkasnya memuat periode,
+   misalnya `rekap-pkb_2021-01-02_2026-09-22.xlsx`.
+
+   Isi kedua berkas sama; yang berbeda hanya bentuknya. Excel cocok untuk
+   diolah lagi (tanggal berupa sel tanggal, uang berupa angka). PDF disusun
+   untuk dicetak di kertas **A3 landscape** dan bisa mencapai ratusan halaman
+   bila tanpa filter.
 
 Mengunggah berkas yang sama dua kali **tidak menggandakan data** — baris yang
 sudah ada diperbarui, dan muncul peringatan bahwa berkas itu pernah disimpan.

@@ -43,8 +43,12 @@ def _pasang_header_keamanan(app: Flask) -> None:
         balasan.headers.setdefault(
             "Content-Security-Policy", KEBIJAKAN_KEAMANAN_KONTEN
         )
-        if balasan.mimetype == "application/json":
-            balasan.headers.setdefault("Cache-Control", "no-store")
+        # Berkas export memuat nama dan alamat juga. send_file memasang
+        # Cache-Control sendiri, jadi di sini nilainya ditimpa, bukan
+        # sekadar diisi bila kosong.
+        unduhan = "attachment" in balasan.headers.get("Content-Disposition", "")
+        if balasan.mimetype == "application/json" or unduhan:
+            balasan.headers["Cache-Control"] = "no-store"
         return balasan
 
 
@@ -57,11 +61,12 @@ def create_app(config_object: type[Config] = Config) -> Flask:
     login_manager.init_app(app)
     _pasang_header_keamanan(app)
 
-    from app.controllers import auth, meta, rekap, upload
+    from app.controllers import auth, export, meta, rekap, upload
 
     app.register_blueprint(auth.bp)
     app.register_blueprint(upload.bp)
     app.register_blueprint(meta.bp)
     app.register_blueprint(rekap.bp)
+    app.register_blueprint(export.bp)
 
     return app
