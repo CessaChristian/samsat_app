@@ -1,4 +1,8 @@
-"""Konfigurasi aplikasi, dibaca sekali dari berkas ``.env``.
+"""Konfigurasi aplikasi, dibaca sekali dari ``backend/.env``.
+
+Backend dan frontend memakai berkas ``.env`` masing-masing: yang di sini
+memuat rahasia (koneksi database, kunci sesi) dan tidak pernah sampai ke
+peramban, sedangkan ``frontend/.env`` hanya memuat alamat.
 
 Acuan: SPESIFIKASI_DASHBOARD_PKB.md bagian 8 (batas berkas, masa berlaku
 token), 14 (cookie sesi), dan 15 (daftar variabel lingkungan).
@@ -12,8 +16,7 @@ from dotenv import load_dotenv
 AKAR_BACKEND = Path(__file__).resolve().parent.parent
 AKAR_PROYEK = AKAR_BACKEND.parent
 
-# .env berada di akar proyek, sejajar dengan .env.example.
-load_dotenv(AKAR_PROYEK / ".env")
+load_dotenv(AKAR_BACKEND / ".env")
 
 
 def _bool_env(nama: str, bawaan: bool = False) -> bool:
@@ -21,6 +24,25 @@ def _bool_env(nama: str, bawaan: bool = False) -> bool:
     if not nilai:
         return bawaan
     return nilai in ("1", "true", "yes", "on")
+
+
+def _int_env(nama: str, bawaan: int) -> int:
+    nilai = (os.environ.get(nama) or "").strip()
+    if not nilai:
+        return bawaan
+    try:
+        return int(nilai)
+    except ValueError as exc:
+        raise RuntimeError(f"{nama} harus berupa angka, bukan \"{nilai}\".") from exc
+
+
+def _folder_env(nama: str, bawaan: Path) -> Path:
+    """Lintasan relatif dihitung dari folder backend, bukan folder kerja."""
+    nilai = (os.environ.get(nama) or "").strip()
+    if not nilai:
+        return bawaan
+    path = Path(nilai)
+    return path if path.is_absolute() else (AKAR_BACKEND / path).resolve()
 
 
 class Config:
@@ -33,14 +55,15 @@ class Config:
     SECRET_KEY = (os.environ.get("SECRET_KEY") or "").strip()
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = "Lax"
-    # Aktifkan hanya bila aplikasi dilayani lewat HTTPS; kalau tidak, cookie
-    # tidak akan pernah terkirim saat pengembangan lokal di http://localhost.
     SESSION_COOKIE_SECURE = _bool_env("SESSION_COOKIE_SECURE", False)
 
+    # --- Server pengembangan (python3 main.py) ---
+    HOST = (os.environ.get("HOST") or "").strip() or "127.0.0.1"
+    PORT = _int_env("PORT", 5000)
+    DEBUG = _bool_env("DEBUG", False)
+
     # --- Unggahan ---
-    UPLOAD_TMP_DIR = Path(
-        (os.environ.get("UPLOAD_TMP_DIR") or "").strip() or (AKAR_PROYEK / "uploads_tmp")
-    )
+    UPLOAD_TMP_DIR = _folder_env("UPLOAD_TMP_DIR", AKAR_BACKEND / "uploads_tmp")
     # Bagian 8: maksimal 10 MB.
     MAX_CONTENT_LENGTH = 10 * 1024 * 1024
     EKSTENSI_DIIZINKAN = (".xlsx", ".xls")
@@ -61,5 +84,6 @@ class Config:
             raise RuntimeError(
                 "Variabel lingkungan berikut belum diisi: "
                 + ", ".join(kurang)
-                + f". Salin {AKAR_PROYEK / '.env.example'} menjadi .env lalu lengkapi."
+                + f". Salin {AKAR_BACKEND / '.env.example'} menjadi "
+                + f"{AKAR_BACKEND / '.env'} lalu lengkapi."
             )
