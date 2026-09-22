@@ -21,8 +21,13 @@
   --teks-redup: oklch(0.45 0.012 254);
   --teks-label: oklch(0.5 0.012 254);
   --teks-samar: oklch(0.55 0.012 254);
-  --teks-samar-2: oklch(0.58 0.012 254);
-  --teks-samar-3: oklch(0.6 0.012 254);
+  /* Prototipe memakai L 0.58 dan 0.60; kontrasnya hanya 4,28 dan 3,94
+     terhadap latar putih, sedangkan WCAG AA menuntut 4,5 untuk teks
+     kecil. Keduanya disamakan dengan --teks-samar (L 0.55), satu-satunya
+     nilai yang lolos pada latar putih (4,85) maupun pada latar abu muda
+     layar Login (4,64). Perbedaannya dari desain nyaris tak terlihat. */
+  --teks-samar-2: oklch(0.55 0.012 254);
+  --teks-samar-3: oklch(0.55 0.012 254);
 
   /* garis dan bidang */
   --garis: oklch(0.92 0.006 254);

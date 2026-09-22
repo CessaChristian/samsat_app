@@ -143,7 +143,7 @@ export default function BilahFilter({
           </div>
         </div>
 
-        <div style={{ ...gayaKolom, flex: '0 1 165px' }}>
+        <label style={{ ...gayaKolom, flex: '0 1 165px' }}>
           <span style={gayaLabel}>Jenis kendaraan</span>
           <select
             style={gayaKendali}
@@ -154,9 +154,9 @@ export default function BilahFilter({
             <option value="2">Roda 2</option>
             <option value="4">Roda 4</option>
           </select>
-        </div>
+        </label>
 
-        <div style={{ ...gayaKolom, flex: '0 1 175px' }}>
+        <label style={{ ...gayaKolom, flex: '0 1 175px' }}>
           <span style={gayaLabel}>Status</span>
           <select
             style={gayaKendali}
@@ -167,9 +167,9 @@ export default function BilahFilter({
             <option value="LUNAS">Lunas</option>
             <option value="BELUM_LUNAS">Belum lunas</option>
           </select>
-        </div>
+        </label>
 
-        <div style={{ ...gayaKolom, flex: '0 1 190px' }}>
+        <label style={{ ...gayaKolom, flex: '0 1 190px' }}>
           <span style={gayaLabel}>Kecamatan</span>
           <select
             style={gayaKendali}
@@ -183,9 +183,9 @@ export default function BilahFilter({
               </option>
             ))}
           </select>
-        </div>
+        </label>
 
-        <div style={{ ...gayaKolom, flex: '0 1 215px' }}>
+        <label style={{ ...gayaKolom, flex: '0 1 215px' }}>
           <span style={gayaLabel}>Kelurahan / desa</span>
           <select
             style={gayaKendali}
@@ -199,7 +199,7 @@ export default function BilahFilter({
               </option>
             ))}
           </select>
-        </div>
+        </label>
 
         <button
           type="button"

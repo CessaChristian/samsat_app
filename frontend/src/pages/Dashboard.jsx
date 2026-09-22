@@ -190,6 +190,7 @@ export default function Dashboard({ pengguna, onKeluar }) {
         </div>
       )}
 
+      <main>
       {!adaData ? (
         <LayarKosong onUnggah={() => setModalBuka(true)} />
       ) : (
@@ -265,6 +266,7 @@ export default function Dashboard({ pengguna, onKeluar }) {
           )}
         </>
       )}
+      </main>
 
       {modalBuka && (
         <ModalUnggah onTutup={() => setModalBuka(false)} onTersimpan={setelahTersimpan} />

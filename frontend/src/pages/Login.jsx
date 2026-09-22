@@ -41,7 +41,7 @@ export default function Login({ onMasuk }) {
         background: 'oklch(0.985 0.004 254)',
       }}
     >
-      <div style={{ width: 'min(400px, 100%)' }}>
+      <main style={{ width: 'min(400px, 100%)' }}>
         <div
           style={{
             display: 'flex',
@@ -51,9 +51,9 @@ export default function Login({ onMasuk }) {
             marginBottom: 22,
           }}
         >
-          <img src={logoJateng} alt="Lambang Provinsi Jawa Tengah" style={{ height: 44 }} />
-          <img src={logoPolda} alt="Lambang Polda Jawa Tengah" style={{ height: 44 }} />
-          <img src={logoJasaraharja} alt="Logo Jasa Raharja" style={{ height: 38 }} />
+          <img src={logoJateng} alt="Lambang Provinsi Jawa Tengah" width={40} height={44} style={{ height: 44 }} />
+          <img src={logoPolda} alt="Lambang Polda Jawa Tengah" width={33} height={44} style={{ height: 44 }} />
+          <img src={logoJasaraharja} alt="Logo Jasa Raharja" width={38} height={38} style={{ height: 38 }} />
         </div>
 
         <div
@@ -124,7 +124,7 @@ export default function Login({ onMasuk }) {
           Aplikasi internal. Berisi data identitas pemilik kendaraan —
           jangan dibagikan ke luar instansi.
         </p>
-      </div>
+      </main>
     </div>
   )
 }

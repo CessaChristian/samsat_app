@@ -33,22 +33,32 @@ export default function Header({ batchTerakhir, adaData, onUnggah, pengguna, onK
           <img
             src={logoJateng}
             alt="Lambang Provinsi Jawa Tengah"
+            width={29}
+            height={32}
             style={{ height: 32, width: 'auto', display: 'block' }}
           />
           <img
             src={logoPolda}
             alt="Lambang Polda Jawa Tengah"
+            width={24}
+            height={32}
             style={{ height: 32, width: 'auto', display: 'block' }}
           />
           <img
             src={logoJasaraharja}
             alt="Logo Jasa Raharja"
+            width={28}
+            height={28}
             style={{ height: 28, width: 'auto', display: 'block' }}
           />
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 1, minWidth: 0 }}>
-          <div
+          {/* Judul halaman yang sebenarnya. Ukurannya tetap seperti desain;
+              yang berubah hanya jenis elemennya, agar pembaca layar punya
+              satu h1 sebagai titik awal. */}
+          <h1
             style={{
+              margin: 0,
               fontSize: 14.5,
               fontWeight: 600,
               letterSpacing: '-0.01em',
@@ -56,7 +66,7 @@ export default function Header({ batchTerakhir, adaData, onUnggah, pengguna, onK
             }}
           >
             Samsat Kota Salatiga
-          </div>
+          </h1>
           <div style={{ fontSize: 11.5, color: 'var(--teks-samar-2)', whiteSpace: 'nowrap' }}>
             Monitoring Penerimaan PKB
           </div>

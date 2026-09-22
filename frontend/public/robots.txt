@@ -1,0 +1,5 @@
+# Aplikasi internal Samsat Kota Salatiga.
+# Berisi nama dan alamat pemilik kendaraan, jadi tidak boleh diindeks
+# mesin pencari maupun perayap lain.
+User-agent: *
+Disallow: /
