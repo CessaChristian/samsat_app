@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Jalankan server pengembangan backend.
+"""Jalankan server pengembangan.
+
+Melayani tampilan sekaligus API di satu alamat, asalkan "npm run build"
+sudah pernah dijalankan di folder frontend.
 
     python3 main.py                 # pakai HOST dan PORT dari backend/.env
     python3 main.py --port 5001     # timpa porta sekali jalan
@@ -68,14 +71,26 @@ def main(argv: list[str]) -> int:
     # Nama database saja yang dicetak; sisanya bisa memuat kata sandi.
     nama_db = Config.DATABASE_URL.rsplit("/", 1)[-1].split("?")[0]
 
+    tampilan_siap = (Config.FOLDER_FRONTEND / "index.html").is_file()
+
     print()
     print("  Dashboard PKB — Samsat Kota Salatiga")
-    print(f"  backend   http://{host}:{port}")
+    print(f"  alamat    http://{host}:{port}")
     print(f"  database  {nama_db}")
+    print(f"  tampilan  {'hasil build' if tampilan_siap else 'BELUM DIBANGUN'}")
     print(f"  debug     {'aktif' if debug else 'mati'}")
     print()
-    print("  Buka http://localhost:5173 untuk tampilannya")
-    print("  (jalankan 'npm run dev' di folder frontend pada terminal lain)")
+    if tampilan_siap:
+        print(f"  Buka http://{host}:{port} — tampilan dan API dilayani di sini.")
+        print("  Setelah mengubah kode frontend, jalankan 'npm run build' lagi")
+        print("  supaya perubahannya ikut tersaji.")
+    else:
+        print("  Tampilan belum dibangun. Jalankan sekali di folder frontend:")
+        print()
+        print("      npm install && npm run build")
+        print()
+        print("  Atau saat sedang mengerjakan tampilan, jalankan 'npm run dev'")
+        print("  di terminal lain lalu buka http://localhost:5173")
     print()
 
     try:

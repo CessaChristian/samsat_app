@@ -62,6 +62,13 @@ class Config:
     PORT = _int_env("PORT", 5000)
     DEBUG = _bool_env("DEBUG", False)
 
+    # --- Tampilan ---
+    # Hasil "npm run build". Disajikan langsung oleh Flask supaya satu
+    # perintah sudah melayani tampilan dan API di alamat yang sama.
+    FOLDER_FRONTEND = _folder_env(
+        "FOLDER_FRONTEND", AKAR_PROYEK / "frontend" / "dist"
+    )
+
     # --- Unggahan ---
     UPLOAD_TMP_DIR = _folder_env("UPLOAD_TMP_DIR", AKAR_BACKEND / "uploads_tmp")
     # Bagian 8: maksimal 10 MB.

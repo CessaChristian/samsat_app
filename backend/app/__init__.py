@@ -3,7 +3,9 @@
 Acuan: SPESIFIKASI_DASHBOARD_PKB.md bagian 15.
 """
 
-from flask import Flask
+from pathlib import Path
+
+from flask import Flask, send_from_directory
 
 from app.config import Config
 from app.extensions import login_manager
@@ -25,6 +27,35 @@ KEBIJAKAN_KEAMANAN_KONTEN = "; ".join(
         "object-src 'none'",
     )
 )
+
+
+PESAN_BELUM_DIBANGUN = (
+    "Tampilan belum dibangun.\n\n"
+    "Jalankan sekali di folder frontend:\n\n"
+    "    npm install\n"
+    "    npm run build\n\n"
+    "lalu muat ulang halaman ini. API di /api tetap berjalan."
+)
+
+
+def _pasang_tampilan(app: Flask, folder: Path) -> None:
+    """Sajikan hasil build frontend di akar situs.
+
+    Dengan begini ``python3 main.py`` saja sudah melayani tampilan sekaligus
+    API di alamat yang sama, jadi saat demo tidak perlu menyalakan Vite.
+    Berkas pendukung (/assets, /favicon.svg) ditangani penyajian statis
+    bawaan Flask; yang perlu rute tersendiri hanya halaman utamanya.
+    """
+
+    @app.get("/")
+    def halaman_utama():
+        if not (folder / "index.html").is_file():
+            return (
+                PESAN_BELUM_DIBANGUN,
+                503,
+                {"Content-Type": "text/plain; charset=utf-8"},
+            )
+        return send_from_directory(folder, "index.html")
 
 
 def _pasang_header_keamanan(app: Flask) -> None:
@@ -54,12 +85,16 @@ def _pasang_header_keamanan(app: Flask) -> None:
 
 def create_app(config_object: type[Config] = Config) -> Flask:
     """Rakit aplikasi: konfigurasi, ekstensi, lalu controller."""
-    app = Flask(__name__)
+    folder_tampilan = Path(config_object.FOLDER_FRONTEND)
+    # static_url_path kosong: berkas build tersaji di akar, persis seperti
+    # rujukan di dalam index.html ("/assets/...", "/favicon.svg").
+    app = Flask(__name__, static_folder=str(folder_tampilan), static_url_path="")
     app.config.from_object(config_object)
     config_object.periksa()
 
     login_manager.init_app(app)
     _pasang_header_keamanan(app)
+    _pasang_tampilan(app, folder_tampilan)
 
     from app.controllers import auth, export, meta, rekap, upload
 

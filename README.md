@@ -60,6 +60,7 @@ cp frontend/.env.example frontend/.env
 | `SESSION_COOKIE_SECURE` | `false` saat pengembangan; `true` hanya bila dilayani lewat HTTPS |
 | `HOST`, `PORT` | Alamat server pengembangan. Bawaan `127.0.0.1:5000` |
 | `DEBUG` | `true` saat pengembangan agar berkas dimuat ulang otomatis |
+| `FOLDER_FRONTEND` | Hasil `npm run build` yang disajikan Flask. Bawaan `frontend/dist` |
 | `UPLOAD_TMP_DIR` | Folder unggahan sementara. Lintasan relatif dihitung dari `backend/` |
 | `APP_TODAY` | **Biarkan kosong.** Hanya diisi saat menguji |
 | `TEST_DATABASE_URL` | Database khusus tes, **harus berbeda** dari `DATABASE_URL` |
@@ -107,9 +108,24 @@ dibuat lewat skrip ini.
 
 ## 3. Menjalankan aplikasi
 
-Butuh **dua terminal** yang berjalan bersamaan.
+Ada dua cara menjalankannya. Pilih sesuai keperluan:
 
-### Terminal 1 — backend
+| Cara | Untuk apa | Yang dijalankan | Alamat |
+|---|---|---|---|
+| **Satu perintah** | memakai aplikasi, demo | `main.py` saja | <http://127.0.0.1:5000> |
+| **Dua terminal** | mengerjakan tampilan | `main.py` + `npm run dev` | <http://localhost:5173> |
+
+### 3.1 Satu perintah — untuk memakai dan demo
+
+Bangun tampilannya lebih dulu. Cukup sekali, diulang hanya bila kode
+frontend berubah:
+
+```bash
+cd pkb-dashboard/frontend
+npm run build
+```
+
+Lalu jalankan backend saja:
 
 ```bash
 cd pkb-dashboard/backend
@@ -127,10 +143,21 @@ Keluaran yang benar:
 
 ```
   Dashboard PKB — Samsat Kota Salatiga
-  backend   http://127.0.0.1:5000
+  alamat    http://127.0.0.1:5000
   database  samsat_app
+  tampilan  hasil build
   debug     aktif
+
+  Buka http://127.0.0.1:5000 — tampilan dan API dilayani di sini.
 ```
+
+Buka **<http://127.0.0.1:5000>**. Flask menyajikan hasil `npm run build`
+di akar situs sekaligus melayani `/api`, jadi tidak ada porta kedua dan
+tidak perlu CORS.
+
+Bila barisnya berbunyi `tampilan  BELUM DIBANGUN`, berarti `npm run build`
+belum pernah dijalankan. Halaman utamanya akan membalas pesan yang
+menjelaskan hal itu, bukan layar kosong.
 
 Pilihan yang tersedia:
 
@@ -139,18 +166,34 @@ python3 main.py --port 5001     # timpa porta sekali jalan
 python3 main.py --tanpa-debug   # matikan muat ulang otomatis
 ```
 
-### Terminal 2 — frontend
+### 3.2 Dua terminal — saat mengerjakan tampilan
+
+Cara di atas menyajikan hasil build, jadi perubahan kode frontend baru
+terlihat setelah `npm run build` diulang. Saat sedang mengerjakan tampilan
+itu merepotkan, maka pakai server pengembangan Vite yang memuat ulang
+sendiri setiap berkas disimpan.
+
+Terminal 1:
+
+```bash
+cd pkb-dashboard/backend
+source ../.venv/bin/activate
+python3 main.py
+```
+
+Terminal 2:
 
 ```bash
 cd pkb-dashboard/frontend
 npm run dev
 ```
 
-### Buka aplikasinya
+Lalu buka **<http://localhost:5173>** — bukan 5000. Dalam mode ini Vite yang
+menyajikan tampilan dan meneruskan `/api` ke Flask, sehingga cookie sesi
+tetap berjalan satu origin.
 
-Buka **<http://localhost:5173>** — bukan porta 5000. Porta 5000 hanya
-melayani JSON; Vite yang menyajikan tampilan dan meneruskan `/api` ke Flask,
-sehingga cookie sesi berjalan satu origin tanpa perlu CORS.
+Backend tetap wajib hidup di kedua cara: `npm run dev` sendirian hanya
+menyajikan halaman tanpa ada yang menjawab `/api`.
 
 Masuk memakai akun dari langkah 2.5.
 
