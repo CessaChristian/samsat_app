@@ -73,6 +73,69 @@ Memastikan berhasil — harus keluar angka `23`:
 psql -d samsat_app -tAc "SELECT COUNT(*) FROM dim_wilayah"
 ```
 
+#### Mengetahui alamat databasenya
+
+Langkah berikutnya meminta `DATABASE_URL`. Bentuknya begini:
+
+```
+postgresql://PENGGUNA:SANDI@HOST:PORT/NAMA_DATABASE
+                     └──────┘
+                     boleh dihilangkan bila koneksi tidak minta kata sandi
+```
+
+Seluruh bagiannya bisa dilihat dari terminal — tidak perlu pgAdmin, DBeaver,
+atau aplikasi sejenis:
+
+```bash
+psql -d samsat_app -c "\conninfo"
+```
+
+Keluarannya menyebutkan semuanya sekaligus:
+
+```
+You are connected to database "samsat_app" as user "cessac"
+on host "localhost" (address "::1") at port "5432".
+```
+
+Dari keluaran itu alamatnya disusun menjadi:
+
+```
+postgresql://cessac@localhost:5432/samsat_app
+```
+
+**Perlu kata sandi atau tidak?** Perhatikan saat menjalankan perintah di
+atas. Bila `psql` langsung masuk tanpa bertanya apa-apa, koneksinya tidak
+memerlukan kata sandi dan bagian `:SANDI` cukup dihilangkan — ini bawaan
+PostgreSQL yang dipasang lewat Homebrew di macOS. Bila `psql` meminta
+`Password:`, sisipkan kata sandinya:
+
+```
+postgresql://cessac:kata-sandinya@localhost:5432/samsat_app
+```
+
+Bila kata sandinya memuat karakter `@ : / # ?`, karakter itu harus ditulis
+dalam bentuk sandi-persen — misalnya `@` menjadi `%40` — kalau tidak,
+alamatnya akan salah dibaca.
+
+**Mengujinya sebelum dipakai.** Alamat yang sudah disusun bisa langsung
+dicoba. Yang di dalam tanda kutip itu persis nilai yang nanti diisikan ke
+`DATABASE_URL`:
+
+```bash
+psql "postgresql://cessac@localhost:5432/samsat_app" -c "SELECT 1"
+```
+
+Keluar tabel berisi angka `1` berarti alamatnya benar.
+
+Perintah lain yang berguna:
+
+| Perintah | Gunanya |
+|---|---|
+| `pg_isready` | memastikan server PostgreSQL hidup |
+| `psql -l` | daftar seluruh database beserta pemiliknya |
+| `psql -d postgres -tAc "SHOW port"` | porta yang sedang dipakai |
+| `whoami` | nama pengguna sistem, yang biasanya juga jadi nama pengguna PostgreSQL |
+
 ### 2.5 Berkas konfigurasi
 
 Ada dua berkas `.env` terpisah. Salin contohnya lalu sesuaikan:
@@ -86,7 +149,7 @@ Yang **wajib** diisi di `backend/.env`:
 
 | Variabel | Keterangan |
 |---|---|
-| `DATABASE_URL` | Koneksi PostgreSQL, misal `postgresql://namauser@localhost:5432/samsat_app` |
+| `DATABASE_URL` | Alamat database dari langkah 2.4, misal `postgresql://cessac@localhost:5432/samsat_app` |
 | `SECRET_KEY` | Kunci penanda tangan cookie sesi. Wajib diganti dengan nilai acak |
 
 Membangkitkan `SECRET_KEY`:
