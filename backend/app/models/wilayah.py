@@ -4,13 +4,13 @@ from app.database import ambil_semua
 
 __all__ = ["dikelompokkan", "semua"]
 
-
 def semua() -> list[dict]:
     return ambil_semua(
-        "SELECT id, kecamatan, kelurahan FROM dim_wilayah"
-        " ORDER BY kecamatan, kelurahan"
+        """
+        SELECT id, kecamatan, kelurahan FROM dim_wilayah
+        ORDER BY kecamatan, kelurahan
+        """
     )
-
 
 def dikelompokkan() -> list[dict]:
     """[{kecamatan, kelurahan: [...]}] untuk mengisi pilihan filter."""

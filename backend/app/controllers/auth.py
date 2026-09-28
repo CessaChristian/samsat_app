@@ -11,7 +11,6 @@ from app.models.pengguna import Pengguna, ambil_per_username
 
 bp = Blueprint("auth", __name__, url_prefix="/api/auth")
 
-
 @bp.post("/login")
 def login():
     data = request.get_json(silent=True) or {}
@@ -28,9 +27,8 @@ def login():
             ),
             400,
         )
-
     baris = ambil_per_username(username)
-    # Pesan sengaja seragam supaya tidak terungkap username mana yang terdaftar.
+    # Pesan dibuat sama agar username tidak tahu terdaftar atau tidak
     if not baris or not check_password_hash(baris["password_hash"], password):
         return (
             jsonify({"kode": "LOGIN_GAGAL", "pesan": "Username atau kata sandi salah."}),
@@ -40,12 +38,10 @@ def login():
     login_user(Pengguna.dari_baris(baris), remember=False)
     return jsonify({"username": baris["username"]})
 
-
 @bp.post("/logout")
 def logout():
     logout_user()
     return "", 204
-
 
 @bp.get("/me")
 @login_required

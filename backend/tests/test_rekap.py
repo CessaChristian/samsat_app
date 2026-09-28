@@ -343,3 +343,6 @@ def test_filter_tidak_masuk_akal_ditolak(klien_masuk, kueri):
     balasan = klien_masuk.get(f"/api/rekap?{kueri}")
 
     assert balasan.status_code == 400
+    # Kode pesannya ikut diperiksa: frontend membedakan jenis kesalahan lewat
+    # medan ini, jadi salah ketik satu huruf pun harus tertangkap.
+    assert balasan.get_json()["kode"] == "FILTER_TIDAK_VALID"

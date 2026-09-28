@@ -17,7 +17,6 @@ bp = Blueprint("export", __name__, url_prefix="/api")
 
 TIPE_XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
-
 def _kirim(tulis, tipe: str, akhiran: str):
     """Susun berkas lalu kirim sebagai unduhan bernama periode filternya."""
     try:
@@ -37,7 +36,6 @@ def _kirim(tulis, tipe: str, akhiran: str):
 @login_required
 def excel():
     return _kirim(export_xlsx.tulis, TIPE_XLSX, "xlsx")
-
 
 @bp.get("/export.pdf")
 @login_required

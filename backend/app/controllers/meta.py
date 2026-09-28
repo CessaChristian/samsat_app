@@ -12,7 +12,6 @@ from app.services.rekap import RODA_SAH, STATUS_SAH, rentang_tersedia
 
 bp = Blueprint("meta", __name__, url_prefix="/api")
 
-
 @bp.get("/meta")
 @login_required
 def meta():

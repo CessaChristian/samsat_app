@@ -10,7 +10,6 @@ from app.services.rekap import FilterTidakValid, buat_filter, hitung
 
 bp = Blueprint("rekap", __name__, url_prefix="/api")
 
-
 @bp.get("/rekap")
 @login_required
 def rekap():

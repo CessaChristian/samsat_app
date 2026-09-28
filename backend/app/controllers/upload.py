@@ -43,15 +43,14 @@ from app.views.upload_view import (
 
 bp = Blueprint("upload", __name__, url_prefix="/api/upload")
 
-
+# Dua fungsi pembantu
 def _folder_sementara() -> Path:
     folder = Path(current_app.config["UPLOAD_TMP_DIR"])
     folder.mkdir(parents=True, exist_ok=True)
     return folder
 
-
 def _peringatan_berkas_berulang(hash_file: str) -> list[dict]:
-    """Berkas dengan isi yang sama pernah disimpan? Beri tahu, jangan tolak."""
+    """Pengecekan apakah berkas sudah pernah disimpan atau belum jika iya akan diberitahu"""
     sebelumnya = model_batch.terakhir_dengan_hash(hash_file)
     if not sebelumnya:
         return []
@@ -67,12 +66,12 @@ def _peringatan_berkas_berulang(hash_file: str) -> list[dict]:
         }
     ]
 
+# Endpoint untuk cek file
 
 @bp.post("/check")
 @login_required
 def check():
     folder = _folder_sementara()
-    # Bagian 8 butir 5: bersihkan titipan kedaluwarsa setiap endpoint dipanggil.
     bersihkan_kedaluwarsa(folder)
 
     berkas = request.files.get("file")
@@ -85,7 +84,6 @@ def check():
             ),
             400,
         )
-
     nama = berkas.filename
     akhiran = Path(nama).suffix.lower()
     if akhiran not in current_app.config["EKSTENSI_DIIZINKAN"]:
@@ -114,8 +112,7 @@ def check():
 
     mulai = time.perf_counter()
 
-    # Berkas dititipkan lebih dulu supaya pembaca punya lintasan nyata; bila
-    # pemeriksaan gagal, titipan langsung dibuang lagi.
+    # Pengecekan pada file terlebih dahulu jika saat pengecekan gagal, file langsung dibuang
     token = titipkan(
         isi, nama, folder, umur_detik=current_app.config["TOKEN_KEDALUWARSA_DETIK"]
     )
@@ -160,7 +157,7 @@ def check():
         )
     )
 
-
+# Endpoint simpan data ke database
 @bp.post("/commit")
 @login_required
 def commit():
@@ -175,7 +172,7 @@ def commit():
     except TokenTidakBerlaku as exc:
         return jsonify(kesalahan_berkas("TOKEN_TIDAK_BERLAKU", str(exc))), 410
 
-    # Hasil pemeriksaan sebelumnya tidak dipercaya: baca dan validasi lagi.
+    # Validasi sekali lagi
     try:
         terbaca = baca(titipan.path)
     except BerkasTidakTerbaca as exc:
