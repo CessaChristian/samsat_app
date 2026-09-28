@@ -6,7 +6,7 @@ import logoJateng from '../assets/logo-jateng.png'
 import logoPolda from '../assets/logo-polda.png'
 
 /**
- * Layar masuk. Prototipe Claude Design tidak menyediakan layar ini, jadi
+ * Layar masuk. Prototipe desain tidak menyediakan layar ini, jadi
  * tampilannya disusun dari token desain yang sama: Plus Jakarta Sans, kartu
  * bergaris tipis, aksen biru, sudut 14px.
  *

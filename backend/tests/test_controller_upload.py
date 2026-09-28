@@ -228,3 +228,26 @@ def test_unggah_ulang_tidak_menggandakan_baris(klien_masuk, berkas_baik, koneksi
         klien_masuk.post("/api/upload/commit", json={"token": token})
 
     assert _hitung(koneksi_uji) == 2
+
+
+def test_berkas_melebihi_batas_dibalas_json(klien_masuk):
+    """Flask menolak badan permintaan yang kelewat besar sebelum view jalan.
+
+    Tanpa penangan khusus, balasannya halaman HTML 413 bawaan Flask yang
+    tidak bisa dibaca frontend, sehingga di layar hanya muncul
+    "Permintaan gagal (413)" alih-alih keterangan batas ukurannya.
+    """
+    import io
+
+    besar = b"x" * (11 * 1024 * 1024)
+
+    balasan = klien_masuk.post(
+        "/api/upload/check",
+        data={"file": (io.BytesIO(besar), "besar.xlsx")},
+        content_type="multipart/form-data",
+    )
+
+    assert balasan.status_code == 413
+    assert balasan.mimetype == "application/json"
+    assert balasan.get_json()["kode"] == "BERKAS_TERLALU_BESAR"
+    assert "10 MB" in balasan.get_json()["pesan"]

@@ -17,7 +17,6 @@ from flask_login import login_required
 
 from app.konstanta import (
     BERKAS_PERNAH_DISIMPAN,
-    BERKAS_TERLALU_BESAR,
     BERKAS_TIDAK_TERBACA,
     FORMAT_TIDAK_DIDUKUNG,
 )
@@ -97,18 +96,9 @@ def check():
             400,
         )
 
+    # Batas 10 MB ditegakkan Flask lewat MAX_CONTENT_LENGTH, yaitu sebelum
+    # fungsi ini dijalankan. Penangannya ada di app/__init__.py.
     isi = berkas.read()
-    batas = current_app.config["MAX_CONTENT_LENGTH"]
-    if len(isi) > batas:
-        return (
-            jsonify(
-                kesalahan_berkas(
-                    BERKAS_TERLALU_BESAR,
-                    f"Berkas melebihi batas {batas // (1024 * 1024)} MB.",
-                )
-            ),
-            400,
-        )
 
     mulai = time.perf_counter()
 

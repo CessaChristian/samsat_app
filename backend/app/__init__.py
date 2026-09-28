@@ -5,9 +5,11 @@ Acuan: SPESIFIKASI_DASHBOARD_PKB.md bagian 15.
 
 from pathlib import Path
 
-from flask import Flask, send_from_directory
+from flask import Flask, jsonify, send_from_directory
+from werkzeug.exceptions import RequestEntityTooLarge
 
 from app.config import Config
+from app.konstanta import BERKAS_TERLALU_BESAR
 from app.extensions import login_manager
 
 #: Aplikasi hanya memuat skripnya sendiri; satu-satunya pihak luar adalah
@@ -58,6 +60,28 @@ def _pasang_tampilan(app: Flask, folder: Path) -> None:
         return send_from_directory(folder, "index.html")
 
 
+def _pasang_penangan_galat(app: Flask) -> None:
+    """Balas JSON untuk galat yang ditimbulkan Flask sendiri.
+
+    MAX_CONTENT_LENGTH ditegakkan Flask saat membaca badan permintaan,
+    yaitu sebelum controller dijalankan. Tanpa penangan ini balasannya
+    halaman HTML bawaan yang tidak bisa dibaca frontend.
+    """
+
+    @app.errorhandler(RequestEntityTooLarge)
+    def terlalu_besar(_):
+        batas = app.config["MAX_CONTENT_LENGTH"]
+        return (
+            jsonify(
+                {
+                    "kode": BERKAS_TERLALU_BESAR,
+                    "pesan": f"Berkas melebihi batas {batas // (1024 * 1024)} MB.",
+                }
+            ),
+            413,
+        )
+
+
 def _pasang_header_keamanan(app: Flask) -> None:
     """Header yang berlaku untuk seluruh respons.
 
@@ -92,7 +116,12 @@ def create_app(config_object: type[Config] = Config) -> Flask:
     app.config.from_object(config_object)
     config_object.periksa()
 
+    # Urutan kunci JSON mengikuti urutan penulisan, bukan abjad, supaya
+    # balasannya terbaca serupa dengan yang tertulis di kode.
+    app.json.sort_keys = False
+
     login_manager.init_app(app)
+    _pasang_penangan_galat(app)
     _pasang_header_keamanan(app)
     _pasang_tampilan(app, folder_tampilan)
 

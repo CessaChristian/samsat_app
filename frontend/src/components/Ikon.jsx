@@ -1,4 +1,4 @@
-// Ikon garis, disalin dari prototipe Claude Design supaya bentuknya sama.
+// Ikon garis, disalin dari prototipe desain supaya bentuknya sama.
 
 const dasar = {
   fill: 'none',

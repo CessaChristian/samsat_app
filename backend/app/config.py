@@ -77,7 +77,6 @@ class Config:
     # Bagian 8: berkas sementara kedaluwarsa 30 menit.
     TOKEN_KEDALUWARSA_DETIK = 30 * 60
 
-    JSON_SORT_KEYS = False
 
     @classmethod
     def periksa(cls) -> None:
