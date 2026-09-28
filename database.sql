@@ -1,10 +1,14 @@
--- 001_init.sql — skema awal Dashboard Monitoring PKB Samsat Kota Salatiga.
--- Acuan: SPESIFIKASI_DASHBOARD_PKB.md bagian 10.2.
-
-CREATE TABLE schema_migrations (
-    nama        TEXT PRIMARY KEY,
-    dijalankan  TIMESTAMPTZ NOT NULL DEFAULT now()
-);
+-- database.sql — skema dan data master Dashboard Monitoring PKB
+-- Samsat Kota Salatiga.
+--
+-- Jalankan sekali setelah membuat database yang kosong:
+--
+--     createdb samsat_app
+--     psql -d samsat_app -f database.sql
+--
+-- Berkas ini TIDAK membuat akun login. Buat akun dengan:
+--
+--     cd backend && python3 scripts/buat_akun.py <username>
 
 CREATE TABLE dim_wilayah (
     id         SERIAL PRIMARY KEY,
@@ -75,3 +79,37 @@ CREATE TABLE pengguna (
     password_hash  TEXT NOT NULL,
     dibuat_pada    TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+-- Master 4 kecamatan dan 23 kelurahan Kota Salatiga.
+--
+-- Dua hal yang mudah keliru dan sengaja dicatat di sini:
+--   SIDOREJO KIDUL berada di Kecamatan TINGKIR, bukan SIDOREJO.
+--   SALATIGA adalah nama kelurahan di Kecamatan SIDOREJO.
+
+INSERT INTO dim_wilayah (kecamatan, kelurahan) VALUES
+    ('ARGOMULYO', 'CEBONGAN'),
+    ('ARGOMULYO', 'KUMPULREJO'),
+    ('ARGOMULYO', 'LEDOK'),
+    ('ARGOMULYO', 'NOBOREJO'),
+    ('ARGOMULYO', 'RANDUACIR'),
+    ('ARGOMULYO', 'TEGALREJO'),
+
+    ('SIDOMUKTI', 'DUKUH'),
+    ('SIDOMUKTI', 'KALICACING'),
+    ('SIDOMUKTI', 'KECANDRAN'),
+    ('SIDOMUKTI', 'MANGUNSARI'),
+
+    ('SIDOREJO', 'BLOTONGAN'),
+    ('SIDOREJO', 'BUGEL'),
+    ('SIDOREJO', 'KAUMAN KIDUL'),
+    ('SIDOREJO', 'PULUTAN'),
+    ('SIDOREJO', 'SALATIGA'),
+    ('SIDOREJO', 'SIDOREJO LOR'),
+
+    ('TINGKIR', 'GENDONGAN'),
+    ('TINGKIR', 'KALIBENING'),
+    ('TINGKIR', 'KUTOWINANGUN KIDUL'),
+    ('TINGKIR', 'KUTOWINANGUN LOR'),
+    ('TINGKIR', 'SIDOREJO KIDUL'),
+    ('TINGKIR', 'TINGKIR LOR'),
+    ('TINGKIR', 'TINGKIR TENGAH');

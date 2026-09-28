@@ -3,8 +3,6 @@
 Isi kedua berkas sama — seluruh baris detail yang lolos filter aktif — jadi
 kedua rute memakai filter yang sama persis dengan /api/rekap. Dengan begitu
 angka di layar dan isi berkas tidak pernah berbeda.
-
-Acuan: SPESIFIKASI_DASHBOARD_PKB.md bagian 11 (Export) dan 13.
 """
 
 from flask import Blueprint, jsonify, request, send_file

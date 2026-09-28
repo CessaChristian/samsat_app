@@ -5,8 +5,6 @@ token acak, berlaku 30 menit. Klien hanya memegang tokennya.
 
 Token datang dari klien, jadi **tidak pernah** dipakai langsung sebagai nama
 berkas: bentuknya diperiksa dulu agar tidak bisa menunjuk ke luar folder.
-
-Acuan: SPESIFIKASI_DASHBOARD_PKB.md bagian 8.
 """
 
 import json

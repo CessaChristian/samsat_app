@@ -35,7 +35,7 @@ def hitung_sudah_ada(pasangan: Sequence[tuple[str, date]]) -> int:
 
 
 def detail(saringan) -> Iterator[dict]:
-    """Baris detail yang lolos filter, untuk export (bagian 13).
+    """Baris detail yang lolos filter, untuk export.
 
     Memakai kursor sisi server supaya baris mengalir sedikit demi sedikit;
     export tanpa filter bisa berisi ribuan baris dan tidak perlu ditampung

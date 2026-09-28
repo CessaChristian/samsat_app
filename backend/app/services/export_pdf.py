@@ -1,12 +1,12 @@
-"""Export PDF (bagian 13).
+"""Export PDF.
 
 ReportLab ``LongTable`` di kertas A3 landscape, huruf 6 pt, header tabel
 diulang di setiap halaman, nomor halaman di kaki.
 
 Berbeda dengan export Excel, seluruh baris harus ditampung lebih dulu karena
 ``LongTable`` menghitung tinggi tiap baris sebelum memecah halaman. Untuk
-data sebesar berkas pusat hal ini masih wajar, dan spesifikasi menerima PDF
-yang sampai ratusan halaman.
+data sebesar berkas pusat hal ini masih wajar; PDF yang sampai ratusan
+halaman memang diterima.
 """
 
 import io
@@ -58,7 +58,7 @@ AWAL_KOLOM_UANG = len(HEADER_WAJIB) - len(KOLOM_UANG)
 
 
 def _angka(nilai) -> str:
-    """1234567 -> "1.234.567". Uang selalu bulat rupiah (bagian 11)."""
+    """1234567 -> "1.234.567". Uang selalu bulat rupiah."""
     return f"{int(Decimal(nilai)):,}".replace(",", ".")
 
 

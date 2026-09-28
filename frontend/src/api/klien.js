@@ -1,6 +1,5 @@
 // Klien HTTP untuk backend Flask.
 // Semua permintaan menyertakan cookie sesi; Vite mem-proxy /api ke Flask
-// sehingga tetap satu origin. Acuan: SPESIFIKASI_DASHBOARD_PKB.md bagian 15.
 
 /** Dilempar bila backend membalas kode kesalahan. */
 export class GagalApi extends Error {

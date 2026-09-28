@@ -7,7 +7,6 @@ import { angka, persen } from '../format.js'
  * bila filter wilayah aktif — kelurahan di luar filter memang tidak
  * ditampilkan. Kelurahan tanpa data bernilai 0, bukan hilang dari tabel.
  *
- * Acuan: SPESIFIKASI_DASHBOARD_PKB.md bagian 12.
  */
 
 const gayaTh = {

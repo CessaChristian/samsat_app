@@ -1,6 +1,6 @@
 -- Tabel rincian: satu baris per kelurahan, kelurahan tanpa data bernilai 0.
 -- LEFT JOIN dari dim_wilayah supaya 23 kelurahan selalu tampil; bila filter
--- wilayah aktif, kelurahan di luar filter memang tidak ditampilkan (bagian 12).
+-- wilayah aktif, kelurahan di luar filter memang tidak ditampilkan.
 WITH dasar AS (
     SELECT k.id, k.wilayah_id,
            k.pkb_pokok, k.pkb_denda, k.pkb_opsen, k.pkb_denda_opsen,

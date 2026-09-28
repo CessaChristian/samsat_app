@@ -5,7 +5,7 @@ import { angka, rupiahRingkas } from '../format.js'
  *
  * Prototipe menggambarnya dengan div biasa, bukan pustaka grafik, sehingga
  * bentuknya ditiru apa adanya. Keempat kecamatan selalu tampil walau
- * nilainya 0 (bagian 12), dan backend sudah mengurutkannya menurun.
+ * nilainya 0, dan backend sudah mengurutkannya menurun.
  */
 export default function GrafikKecamatan({ data }) {
   const tertinggi = data.reduce((maks, d) => Math.max(maks, d.pkb), 0)

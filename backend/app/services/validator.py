@@ -4,7 +4,7 @@ Fungsi di berkas ini **murni**: tidak menyentuh database, tidak membaca disk,
 tidak memanggil jam. Masukannya :class:`~app.services.pembaca.BerkasExcel`,
 keluarannya :class:`HasilValidasi`.
 
-Urutan pemrosesan mengikuti spesifikasi bagian 9:
+Urutan pemrosesan:
 
 1. Tahap header (A.1). Gagal -> berhenti; kolom lain memang tidak bisa dibaca.
 2. Normalisasi setiap baris (9.C).
@@ -85,7 +85,7 @@ class Kesalahan:
 
 @dataclass(frozen=True)
 class Peringatan:
-    """Penyesuaian otomatis; berkas tetap diterima (bagian 9.B)."""
+    """Penyesuaian otomatis; berkas tetap diterima."""
 
     kode: str
     pesan: str
@@ -443,7 +443,7 @@ def _periksa_uang(sel, nomor, kumpul: _Pengumpul, penyesuaian) -> dict | None:
         return None
 
     # TOTAL tidak divalidasi. Bila kosong atau tidak terbaca, hitung ulang
-    # dari kolom 14-20 (bagian 4).
+    # dari kolom 14-20.
     try:
         total = ke_angka(sel.get("TOTAL"))
     except NilaiTidakValid:
@@ -529,7 +529,7 @@ def _susun_peringatan(penyesuaian: dict[str, list[int]]) -> list[Peringatan]:
 
 
 def validasi(berkas: BerkasExcel) -> HasilValidasi:
-    """Jalankan seluruh pemeriksaan bagian 9 atas satu berkas."""
+    """Jalankan seluruh pemeriksaan atas satu berkas."""
     ringkasan = Ringkasan(baris_terbaca=len(berkas.baris))
 
     # --- A.1: tanpa header yang benar, kolom lain tidak bisa dibaca ---

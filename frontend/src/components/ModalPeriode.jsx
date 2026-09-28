@@ -5,7 +5,7 @@ import { IkonPanahKanan, IkonPanahKiri } from './Ikon.jsx'
 import Modal from './Modal.jsx'
 
 /**
- * Modal pemilih periode (bagian 7.2).
+ * Modal pemilih periode.
  *
  * Dua mode:
  *   Bulan   — kisi 12 bulan; klik bulan pertama lalu bulan kedua untuk

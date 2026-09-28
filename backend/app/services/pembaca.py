@@ -7,8 +7,6 @@ punya nama dan baris mana yang benar-benar hampa.
 Nomor baris yang dibawa adalah nomor baris Excel: header adalah baris 1,
 sehingga data pertama adalah baris 2. Nomor itulah yang muncul di pesan
 kesalahan.
-
-Acuan: SPESIFIKASI_DASHBOARD_PKB.md bagian 4 dan 9 langkah 1.
 """
 
 from dataclasses import dataclass, field

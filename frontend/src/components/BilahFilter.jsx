@@ -13,13 +13,13 @@ import ModalPeriode from './ModalPeriode.jsx'
  * setelah "Terapkan", jadi dashboard memuat ulang sekali, bukan pada tiap
  * perubahan satu kotak.
  *
- * Penyesuaian wajib terhadap prototipe (bagian 3): filter "Lokasi proses"
+ * Penyesuaian wajib terhadap prototipe: filter "Lokasi proses"
  * DIHAPUS PERMANEN — tidak ada kolom, parameter, maupun elemen UI untuk itu.
  *
  * Pemicu periode menyebut nama bulan saat mode Bulan, tetapi baris keterangan
  * di bawahnya tetap menyebut tanggal persis. Itu wajib: bulan berjalan
  * berhenti di hari ini, jadi "September 2026" saja bisa disalahpahami sebagai
- * bulan penuh (bagian 7.2).
+ * bulan penuh.
  */
 
 const gayaLabel = { fontSize: 12, fontWeight: 600, color: 'var(--teks-label)' }

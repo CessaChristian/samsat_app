@@ -6,9 +6,8 @@ import { IkonMap } from './Ikon.jsx'
  *
  * Disalin dari prototipe "Tampilan Awal.dc.html" dengan satu koreksi wajib:
  * langkah 2 di prototipe menyebut "lokasi" sebagai filter. Filter lokasi
- * proses dihapus permanen (bagian 3), jadi kata itu tidak boleh muncul.
+ * proses dihapus permanen, jadi kata itu tidak boleh muncul.
  *
- * Acuan: SPESIFIKASI_DASHBOARD_PKB.md bagian 3 (kondisi layar 2).
  */
 
 const LANGKAH = [

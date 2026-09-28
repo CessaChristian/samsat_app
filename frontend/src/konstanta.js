@@ -1,6 +1,6 @@
 // Ke-21 nama kolom yang harus ada di berkas dari pusat.
 // Daftar ini menggantikan teks kolom wajib di prototipe, yang menyebut kolom
-// lama seperti "Objek" dan "Lokasi Proses" (bagian 3 dan 4).
+// lama seperti "Objek" dan "Lokasi Proses".
 //
 // Backend memakai daftar yang sama di app/konstanta.py — bila format berkas
 // pusat berubah, keduanya harus disunting bersamaan.
@@ -28,7 +28,7 @@ export const HEADER_WAJIB = [
   'TOTAL',
 ]
 
-/** Banyaknya kesalahan yang ditampilkan sebelum diringkas (bagian 9.A). */
+/** Banyaknya kesalahan yang ditampilkan sebelum diringkas. */
 export const KESALAHAN_DITAMPILKAN = 8
 
 export const BATAS_BERKAS_MB = 10

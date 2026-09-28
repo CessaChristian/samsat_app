@@ -3,8 +3,6 @@
 Backend dan frontend memakai berkas ``.env`` masing-masing: yang di sini
 memuat rahasia (koneksi database, kunci sesi) dan tidak pernah sampai ke
 peramban, sedangkan ``frontend/.env`` hanya memuat alamat.
-
-Acuan: SPESIFIKASI_DASHBOARD_PKB.md bagian 8 (batas berkas, masa berlaku
 token), 14 (cookie sesi), dan 15 (daftar variabel lingkungan).
 """
 
@@ -71,10 +69,10 @@ class Config:
 
     # --- Unggahan ---
     UPLOAD_TMP_DIR = _folder_env("UPLOAD_TMP_DIR", AKAR_BACKEND / "uploads_tmp")
-    # Bagian 8: maksimal 10 MB.
+    # maksimal 10 MB.
     MAX_CONTENT_LENGTH = 10 * 1024 * 1024
     EKSTENSI_DIIZINKAN = (".xlsx", ".xls")
-    # Bagian 8: berkas sementara kedaluwarsa 30 menit.
+    # berkas sementara kedaluwarsa 30 menit.
     TOKEN_KEDALUWARSA_DETIK = 30 * 60
 
 

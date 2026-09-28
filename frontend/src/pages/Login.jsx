@@ -10,7 +10,6 @@ import logoPolda from '../assets/logo-polda.png'
  * tampilannya disusun dari token desain yang sama: Plus Jakarta Sans, kartu
  * bergaris tipis, aksen biru, sudut 14px.
  *
- * Acuan: SPESIFIKASI_DASHBOARD_PKB.md bagian 3 (kondisi layar 1) dan 14.
  */
 export default function Login({ onMasuk }) {
   const [username, setUsername] = useState('')

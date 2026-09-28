@@ -34,7 +34,7 @@ function filterAwal(periode) {
 }
 
 /**
- * Halaman utama. Tiga keadaan yang harus ada (bagian 3):
+ * Halaman utama. Tiga keadaan yang harus ada:
  *   - belum ada data  -> kerangka abu dan ajakan unggah
  *   - berisi data     -> kartu, grafik, dan tabel
  *   - modal unggah    -> alur Cek File lalu Simpan

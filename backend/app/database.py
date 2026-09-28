@@ -4,8 +4,6 @@ Seluruh query ditulis sebagai SQL mentah dengan parameter (``%s`` atau
 ``%(nama)s``). Menyusun SQL lewat f-string dari input pengguna dilarang keras.
 Query panjang disimpan sebagai berkas ``.sql`` di ``app/sql/`` dan dimuat
 lewat :func:`muat_sql`.
-
-Acuan: SPESIFIKASI_DASHBOARD_PKB.md bagian 2 (aturan kode).
 """
 
 import atexit

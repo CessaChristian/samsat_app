@@ -8,8 +8,8 @@ import { IkonKeluar, IkonUnggah } from './Ikon.jsx'
  * Kepala halaman: lambang instansi, nama, keterangan data terakhir, dan
  * tombol unggah.
  *
- * Spesifikasi bagian 3 meminta header menyebut "Data per <tanggal unggah
- * terakhir>" berdasarkan batch terakhir yang tersimpan.
+ * Header menyebut "Data per <tanggal unggah terakhir>" berdasarkan batch
+ * terakhir yang tersimpan.
  */
 export default function Header({ batchTerakhir, adaData, onUnggah, pengguna, onKeluar }) {
   return (

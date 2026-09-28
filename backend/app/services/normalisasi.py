@@ -10,8 +10,6 @@ Pembagian hasil yang dipakai di seluruh aplikasi:
 * sel kosong            -> ``None`` (pemanggil yang memutuskan boleh atau tidak)
 * sel berisi tapi salah -> :class:`NilaiTidakValid`
 * sel berisi dan benar  -> nilai bertipe ``Decimal`` / ``date`` / ``str``
-
-Acuan: SPESIFIKASI_DASHBOARD_PKB.md bagian 9.C.
 """
 
 import re
@@ -45,7 +43,7 @@ def kosong(nilai) -> bool:
     """Apakah sel dianggap kosong.
 
     Selain sel hampa, teks ``-`` dan ``--`` juga dianggap kosong
-    (bagian 9.A). Angka 0 **tidak** kosong.
+. Angka 0 **tidak** kosong.
     """
     if nilai is None:
         return True
@@ -69,7 +67,7 @@ def ke_angka(nilai) -> Decimal | None:
 
     Menerima angka Excel maupun teks gaya Indonesia (``1.234.567`` dan
     ``1.234,50``). Nilai negatif tetap dikembalikan; penolakannya urusan
-    validator (bagian 18.5).
+    validator.
     """
     if kosong(nilai):
         return None
@@ -103,7 +101,7 @@ def ke_tanggal(nilai) -> date | None:
 
     Menerima sel tanggal Excel dan teks ``d/m/yyyy`` atau ``dd/mm/yyyy``.
     Format lain — termasuk ``YYYY-MM-DD`` — ditolak karena bukan format
-    yang dipakai instansi (bagian 9.A.4b dan kasus uji 17.2).
+    yang dipakai instansi.
     """
     if kosong(nilai):
         return None
@@ -130,7 +128,7 @@ def teks_tanggal_stnk(nilai) -> str:
 
     Sel tanggal ditulis ``dd/mm/yyyy``; isi lain — termasuk teks aneh seperti
     ``28/03/0203`` yang muncul di data asli — disimpan tanpa diubah
-    (bagian 4 dan 9.C).
+.
     """
     if nilai is None:
         return ""

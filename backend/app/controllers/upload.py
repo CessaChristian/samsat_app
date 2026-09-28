@@ -4,8 +4,6 @@ Cek File memvalidasi tanpa menyentuh tabel data. Bila lolos, berkas dititipkan
 ke folder sementara dan tokennya dikembalikan. Simpan mengambil berkas itu,
 **memvalidasi ulang dari nol** (hasil pemeriksaan sebelumnya tidak dipercaya),
 lalu menyimpan dalam satu transaksi.
-
-Acuan: SPESIFIKASI_DASHBOARD_PKB.md bagian 8 dan 11.
 """
 
 import hashlib

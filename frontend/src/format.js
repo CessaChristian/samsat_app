@@ -1,6 +1,5 @@
 // Pemformatan angka dan tanggal untuk tampilan.
 // Uang dikirim backend sebagai angka bulat rupiah; seluruh pemformatan
-// dilakukan di sini. Acuan: SPESIFIKASI_DASHBOARD_PKB.md bagian 11 dan 7.2.
 
 const angkaId = new Intl.NumberFormat('id-ID')
 const satuDesimal = new Intl.NumberFormat('id-ID', {
@@ -51,7 +50,7 @@ export function tanggalPendek(iso) {
 
 /**
  * Label periode selalu menyebut tanggal, bukan nama bulan saja, supaya
- * bulan berjalan tidak disalahpahami sebagai bulan penuh (bagian 7.2).
+ * bulan berjalan tidak disalahpahami sebagai bulan penuh.
  */
 export function labelPeriode(dari, sampai) {
   if (!dari || !sampai) return '—'
@@ -97,7 +96,7 @@ const BULAN_PANJANG = [
  *
  * Nama bulan saja bisa disalahpahami sebagai bulan penuh, jadi tanggal
  * persisnya tetap ditampilkan pada baris keterangan di bawah bilah filter
- * (bagian 7.2).
+ *.
  */
 export function labelPeriodeBulan(dari, sampai) {
   if (!dari || !sampai) return '—'

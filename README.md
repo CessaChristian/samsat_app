@@ -1,38 +1,54 @@
 # Dashboard Monitoring PKB — Samsat Kota Salatiga
 
-Aplikasi web internal untuk memantau penerimaan PKB, Opsen PKB, dan SWDKLLJ
-per kecamatan dan kelurahan. Petugas mengunggah berkas Excel harian dari
-kantor pusat; aplikasi memvalidasi, menyimpan, lalu menampilkan rekapitulasi
-yang bisa disaring dan diunduh.
+Aplikasi internal untuk memantau penerimaan **Pajak Kendaraan Bermotor
+(PKB)**, **Opsen PKB**, dan **SWDKLLJ** di Kota Salatiga.
 
-> **Data berisi nama dan alamat pemilik kendaraan.** Aplikasi tidak boleh
-> diakses tanpa login, dan berkas contoh tidak boleh masuk repositori.
-> Folder `samples/` serta kedua berkas `.env` sudah diblokir `.gitignore`.
+Petugas mengunggah berkas Excel rekapitulasi dari pusat, lalu dashboard
+menampilkan jumlah objek dan nilai penerimaan per kecamatan dan per
+kelurahan. Data detail dapat diunduh kembali sebagai Excel atau PDF.
+
+> Aplikasi ini memuat **nama dan alamat pemilik kendaraan**. Jangan
+> membagikan berkas unggahan, hasil export, maupun isi databasenya ke luar
+> instansi.
 
 ---
 
 ## 1. Yang perlu terpasang
 
-| Kebutuhan | Versi | Cara memeriksa |
+| Perangkat | Versi | Catatan |
 |---|---|---|
-| Python | 3.11 atau lebih baru | `python3 --version` |
-| Node.js | 18 atau lebih baru | `node --version` |
-| PostgreSQL | 16 | `psql --version` |
+| Python | 3.11 atau lebih baru | diuji pada 3.14 |
+| Node.js | 18 atau lebih baru | diuji pada 25; ikut membawa `npm` |
+| PostgreSQL | 16 | diuji pada 16.11 |
+
+Memastikan semuanya ada:
+
+```bash
+python3 --version
+node --version
+psql --version
+```
 
 ---
 
-## 2. Persiapan pertama kali
+## 2. Pemasangan
 
-Cukup dijalankan sekali. Semua perintah dari dalam folder `pkb-dashboard/`.
+### 2.1 Ambil kodenya
 
-### 2.1 Virtualenv dan dependensi backend
+```bash
+git clone https://github.com/CessaChristian/samsat_app.git
+cd samsat_app
+```
+
+### 2.2 Virtualenv dan dependensi backend
 
 ```bash
 python3 -m venv .venv
+.venv/bin/pip install --upgrade pip
 .venv/bin/pip install -r backend/requirements.txt
 ```
 
-### 2.2 Dependensi frontend
+### 2.3 Dependensi frontend
 
 ```bash
 cd frontend
@@ -40,30 +56,38 @@ npm install
 cd ..
 ```
 
-### 2.3 Berkas konfigurasi
+### 2.4 Database
 
-Backend dan frontend punya `.env` **masing-masing**. Yang di backend memuat
-rahasia dan tidak pernah sampai ke peramban; yang di frontend hanya memuat
-alamat.
+Buat database kosong, lalu jalankan `database.sql`. Berkas itu membuat
+seluruh tabel sekaligus mengisi master 4 kecamatan dan 23 kelurahan Kota
+Salatiga:
+
+```bash
+createdb samsat_app
+psql -d samsat_app -f database.sql
+```
+
+Memastikan berhasil — harus keluar angka `23`:
+
+```bash
+psql -d samsat_app -tAc "SELECT COUNT(*) FROM dim_wilayah"
+```
+
+### 2.5 Berkas konfigurasi
+
+Ada dua berkas `.env` terpisah. Salin contohnya lalu sesuaikan:
 
 ```bash
 cp backend/.env.example backend/.env
 cp frontend/.env.example frontend/.env
 ```
 
-**`backend/.env`**
+Yang **wajib** diisi di `backend/.env`:
 
 | Variabel | Keterangan |
 |---|---|
-| `DATABASE_URL` | Koneksi PostgreSQL, misal `postgresql://pengguna:sandi@localhost:5432/samsat_app` |
-| `SECRET_KEY` | Kunci tanda tangan cookie sesi. Wajib diganti |
-| `SESSION_COOKIE_SECURE` | `false` saat pengembangan; `true` hanya bila dilayani lewat HTTPS |
-| `HOST`, `PORT` | Alamat server pengembangan. Bawaan `127.0.0.1:5000` |
-| `DEBUG` | `true` saat pengembangan agar berkas dimuat ulang otomatis |
-| `FOLDER_FRONTEND` | Hasil `npm run build` yang disajikan Flask. Bawaan `frontend/dist` |
-| `UPLOAD_TMP_DIR` | Folder unggahan sementara. Lintasan relatif dihitung dari `backend/` |
-| `APP_TODAY` | **Biarkan kosong.** Hanya diisi saat menguji |
-| `TEST_DATABASE_URL` | Database khusus tes, **harus berbeda** dari `DATABASE_URL` |
+| `DATABASE_URL` | Koneksi PostgreSQL, misal `postgresql://namauser@localhost:5432/samsat_app` |
+| `SECRET_KEY` | Kunci penanda tangan cookie sesi. Wajib diganti dengan nilai acak |
 
 Membangkitkan `SECRET_KEY`:
 
@@ -71,73 +95,42 @@ Membangkitkan `SECRET_KEY`:
 .venv/bin/python -c "import secrets; print(secrets.token_urlsafe(48))"
 ```
 
-**`frontend/.env`**
+Sisanya boleh dibiarkan apa adanya. Berkas `.env` **tidak pernah**
+di-commit; yang masuk repo hanya `.env.example`.
 
-| Variabel | Keterangan |
-|---|---|
-| `VITE_PORT` | Porta Vite. Bawaan `5173` |
-| `VITE_API_TARGET` | Alamat backend yang dituju proxy `/api`. Harus cocok dengan `HOST`/`PORT` backend |
+### 2.6 Akun untuk masuk
 
-### 2.4 Database dan skema
-
-```bash
-createdb samsat_app
-cd backend
-../.venv/bin/python scripts/migrate.py
-```
-
-Keluaran yang benar berakhir dengan:
-
-```
-2 migrasi terpasang: 001_init.sql, 002_seed_wilayah.sql
-dim_wilayah berisi 23 kelurahan.
-```
-
-### 2.5 Akun petugas
+Aplikasi tidak menyediakan pendaftaran mandiri. Buat akun lewat skrip —
+kata sandi diminta lewat prompt, jadi tidak tertinggal di riwayat terminal:
 
 ```bash
 cd backend
 ../.venv/bin/python scripts/buat_akun.py petugas
+cd ..
 ```
 
-Kata sandi diminta dua kali lewat prompt, tidak lewat argumen, dan disimpan
-sebagai hash. Minimal 8 karakter. Tidak ada halaman pendaftaran — akun hanya
-dibuat lewat skrip ini.
+Kata sandi minimal 8 karakter dan diminta dua kali.
+
+### 2.7 Bangun tampilannya
+
+```bash
+cd frontend
+npm run build
+cd ..
+```
+
+Cukup sekali. Diulang hanya bila kode di `frontend/src` berubah.
 
 ---
 
-## 3. Menjalankan aplikasi
-
-Ada dua cara menjalankannya. Pilih sesuai keperluan:
-
-| Cara | Untuk apa | Yang dijalankan | Alamat |
-|---|---|---|---|
-| **Satu perintah** | memakai aplikasi, demo | `main.py` saja | <http://127.0.0.1:5000> |
-| **Dua terminal** | mengerjakan tampilan | `main.py` + `npm run dev` | <http://localhost:5173> |
-
-### 3.1 Satu perintah — untuk memakai dan demo
-
-Bangun tampilannya lebih dulu. Cukup sekali, diulang hanya bila kode
-frontend berubah:
+## 3. Menjalankan
 
 ```bash
-cd pkb-dashboard/frontend
-npm run build
-```
-
-Lalu jalankan backend saja:
-
-```bash
-cd pkb-dashboard/backend
-source ../.venv/bin/activate
-python3 main.py
-```
-
-Tanpa mengaktifkan virtualenv, jalankan langsung dengan interpreternya:
-
-```bash
+cd backend
 ../.venv/bin/python main.py
 ```
+
+Buka **<http://127.0.0.1:5000>**.
 
 Keluaran yang benar:
 
@@ -151,219 +144,149 @@ Keluaran yang benar:
   Buka http://127.0.0.1:5000 — tampilan dan API dilayani di sini.
 ```
 
-Buka **<http://127.0.0.1:5000>**. Flask menyajikan hasil `npm run build`
-di akar situs sekaligus melayani `/api`, jadi tidak ada porta kedua dan
-tidak perlu CORS.
-
-Bila barisnya berbunyi `tampilan  BELUM DIBANGUN`, berarti `npm run build`
-belum pernah dijalankan. Halaman utamanya akan membalas pesan yang
-menjelaskan hal itu, bukan layar kosong.
+Satu proses melayani tampilan sekaligus API, jadi tidak ada porta kedua.
+Bila barisnya berbunyi `tampilan  BELUM DIBANGUN`, ulangi langkah 2.7.
 
 Pilihan yang tersedia:
 
 ```bash
-python3 main.py --port 5001     # timpa porta sekali jalan
-python3 main.py --tanpa-debug   # matikan muat ulang otomatis
+../.venv/bin/python main.py --port 5001     # ganti porta
+../.venv/bin/python main.py --tanpa-debug   # matikan muat ulang otomatis
 ```
 
-### 3.2 Dua terminal — saat mengerjakan tampilan
+### Saat mengubah tampilan
 
 Cara di atas menyajikan hasil build, jadi perubahan kode frontend baru
-terlihat setelah `npm run build` diulang. Saat sedang mengerjakan tampilan
-itu merepotkan, maka pakai server pengembangan Vite yang memuat ulang
-sendiri setiap berkas disimpan.
-
-Terminal 1:
+terlihat setelah `npm run build` diulang. Saat sedang mengerjakan tampilan,
+pakai server pengembangan Vite yang memuat ulang sendiri:
 
 ```bash
-cd pkb-dashboard/backend
-source ../.venv/bin/activate
-python3 main.py
+# terminal 1
+cd backend && ../.venv/bin/python main.py
+
+# terminal 2
+cd frontend && npm run dev
 ```
 
-Terminal 2:
-
-```bash
-cd pkb-dashboard/frontend
-npm run dev
-```
-
-Lalu buka **<http://localhost:5173>** — bukan 5000. Dalam mode ini Vite yang
-menyajikan tampilan dan meneruskan `/api` ke Flask, sehingga cookie sesi
-tetap berjalan satu origin.
-
-Backend tetap wajib hidup di kedua cara: `npm run dev` sendirian hanya
-menyajikan halaman tanpa ada yang menjawab `/api`.
-
-Masuk memakai akun dari langkah 2.5.
+Lalu buka **<http://localhost:5173>** — bukan 5000. Backend tetap wajib
+hidup: `npm run dev` sendirian hanya menyajikan halaman tanpa ada yang
+menjawab `/api`.
 
 ---
 
 ## 4. Memakai aplikasi
 
-1. Saat database masih kosong, yang tampil adalah layar **"Belum ada data
+1. Masuk dengan akun dari langkah 2.6.
+2. Saat database masih kosong, yang tampil adalah layar **"Belum ada data
    yang ditampilkan"**.
-2. Klik **Unggah Excel**, pilih berkas `.xlsx` atau `.xls` dari kantor pusat
+3. Klik **Unggah Excel**, pilih berkas `.xlsx` atau `.xls` dari pusat
    (maksimal 10 MB).
-3. Klik **Cek File**. Berkas diperiksa **tanpa menulis apa pun** ke database:
+4. Klik **Cek File**. Berkas diperiksa **tanpa menulis apa pun** ke
+   database:
    - lolos → panel hijau berisi ringkasan, ditambah kotak kuning bila ada
      penyesuaian otomatis;
-   - gagal → panel merah berisi daftar kesalahan beserta nomor barisnya, dan
-     tombol Simpan tetap mati sampai berkas diperbaiki.
-4. Klik **Simpan ke database**. Berkas divalidasi ulang dari nol, lalu
+   - gagal → panel merah berisi daftar kesalahan beserta nomor barisnya,
+     dan tombol Simpan tetap mati sampai berkasnya diperbaiki.
+5. Klik **Simpan ke database**. Berkas divalidasi ulang dari nol, lalu
    disimpan dalam satu transaksi. Gagal di tengah berarti tidak ada yang
    tersimpan sama sekali.
-5. Dashboard dimuat ulang. Di atas dashboard ada dua tombol penyaring:
-   - **Periode** — membuka pemilih periode dengan dua mode. Mode *Bulan*
-     memakai kisi 12 bulan (klik bulan awal lalu bulan akhir); mode *Tanggal*
-     memakai dua kotak tanggal. Tersedia juga pilihan cepat *Semua periode*,
-     *Bulan terakhir*, dan *3 bulan terakhir*. Bulan yang tidak punya data
-     tidak bisa dipilih.
-   - **Filter data** — jenis kendaraan, status, kecamatan, dan kelurahan.
+6. Dashboard dimuat ulang. Di atasnya ada dua penyaring:
+   - **Periode** — mode *Bulan* memakai kisi 12 bulan (klik bulan awal lalu
+     bulan akhir); mode *Tanggal* memakai dua kotak tanggal. Ada juga
+     pilihan cepat *Semua periode*, *Bulan terakhir*, dan *3 bulan
+     terakhir*.
+   - **Filter data** — jenis kendaraan, status, kecamatan, kelurahan.
 
-   Pilihan baru baru berlaku setelah **Terapkan** ditekan, jadi dashboard
-   dimuat ulang sekali, bukan pada tiap perubahan. Tombol **Reset**
-   mengembalikan semuanya ke keadaan awal.
+   Pilihan baru berlaku setelah **Terapkan** ditekan.
+7. **Export Excel** dan **Export PDF** di bagian bawah mengunduh seluruh
+   baris detail yang lolos filter yang sedang berlaku — 21 kolom yang sama
+   dengan berkas dari pusat.
 
-6. **Export Excel** dan **Export PDF** di bagian bawah dashboard mengunduh
-   seluruh baris detail yang lolos filter yang sedang berlaku — 21 kolom yang
-   sama persis dengan berkas dari pusat, diurutkan kecamatan, kelurahan,
-   nomor polisi, lalu tanggal jatuh tempo. Nama berkasnya memuat periode,
-   misalnya `rekap-pkb_2021-01-02_2026-09-22.xlsx`.
-
-   Isi kedua berkas sama; yang berbeda hanya bentuknya. Excel cocok untuk
-   diolah lagi (tanggal berupa sel tanggal, uang berupa angka). PDF disusun
-   untuk dicetak di kertas **A3 landscape** dan bisa mencapai ratusan halaman
-   bila tanpa filter.
-
-Mengunggah berkas yang sama dua kali **tidak menggandakan data** — baris yang
-sudah ada diperbarui, dan muncul peringatan bahwa berkas itu pernah disimpan.
+Mengunggah berkas yang sama dua kali **tidak menggandakan data**: baris
+yang sudah ada diperbarui, dan muncul peringatan bahwa berkas itu pernah
+disimpan.
 
 ---
 
-## 5. Menjalankan pengujian
-
-Tes yang menyentuh database memakai `TEST_DATABASE_URL`, bukan database
-aplikasi. Isinya dikosongkan sebelum setiap tes, jadi arahkan ke database
-terpisah:
-
-```bash
-createdb samsat_app_test
-cd backend
-../.venv/bin/python -m pytest
-```
-
-Suite **menolak berjalan** bila `TEST_DATABASE_URL` sama dengan
-`DATABASE_URL`. Bila `TEST_DATABASE_URL` dikosongkan, tes yang butuh database
-dilewati dan sisanya tetap jalan.
-
-Sebagian tes membandingkan hasil dengan berkas contoh di
-`samples/data_dummy_bersih.xlsx`. Bila berkas itu tidak ada, tes tersebut
-dilewati, bukan gagal.
-
----
-
-## 6. Struktur proyek
+## 5. Struktur proyek
 
 ```
-pkb-dashboard/
+samsat_app/
+├── database.sql             skema + master wilayah, dijalankan sekali
 ├── backend/
-│   ├── main.py              server pengembangan: python3 main.py
-│   ├── wsgi.py              titik masuk Gunicorn untuk produksi
-│   ├── .env                 rahasia backend, tidak di-commit
-│   ├── .env.example
-│   ├── app/
-│   │   ├── __init__.py      create_app()
-│   │   ├── config.py        konfigurasi dari backend/.env
-│   │   ├── database.py      pool psycopg 3, SQL mentah, tanpa ORM
-│   │   ├── konstanta.py     21 header, master 23 kelurahan, kode pesan
-│   │   ├── extensions.py    Flask-Login
-│   │   ├── models/          akses data: pengguna, kewajiban, batch, wilayah
-│   │   ├── controllers/     rute: auth, upload, meta, rekap
-│   │   ├── views/           penyusun respons JSON
-│   │   ├── services/        pembaca, normalisasi, validator, penyimpan, rekap
-│   │   ├── utils/           waktu, migrasi
-│   │   └── sql/             query agregasi sebagai berkas .sql
-│   ├── migrations/          001_init.sql, 002_seed_wilayah.sql
-│   ├── scripts/             migrate.py, buat_akun.py
-│   ├── uploads_tmp/         berkas unggahan sementara, tidak di-commit
-│   └── tests/
-├── frontend/
-│   ├── .env                 alamat backend, tidak di-commit
-│   ├── .env.example
-│   ├── vite.config.js       porta dan proxy dibaca dari frontend/.env
-│   └── src/
-│       ├── api/klien.js     klien fetch
-│       ├── components/      Header, filter, kartu, grafik, tabel, modal
-│       ├── pages/           Login, Dashboard
-│       ├── format.js        rupiah dan tanggal dd/mm/yyyy
-│       └── konstanta.js     21 header
-└── samples/                 berkas contoh, tidak di-commit
+│   ├── main.py              titik jalan: python main.py
+│   ├── requirements.txt
+│   ├── scripts/buat_akun.py
+│   └── app/
+│       ├── __init__.py      pabrik aplikasi Flask
+│       ├── config.py        dibaca dari backend/.env
+│       ├── database.py      koneksi PostgreSQL, tanpa ORM
+│       ├── konstanta.py     21 header berkas pusat, master wilayah
+│       ├── controllers/     rute HTTP
+│       ├── models/          akses tabel, SQL mentah
+│       ├── services/        baca Excel, validasi, hitung, export
+│       ├── views/           penyusun balasan JSON
+│       ├── utils/
+│       └── sql/             query panjang sebagai berkas .sql
+└── frontend/
+    ├── vite.config.js
+    ├── index.html
+    └── src/
+        ├── App.jsx
+        ├── api/klien.js     satu-satunya tempat memanggil backend
+        ├── components/
+        ├── pages/
+        └── styles/
 ```
+
+Backend memakai pembagian **MVC**: `controllers` hanya mengatur permintaan
+HTTP, `models` hanya menyentuh database, `services` memuat aturan
+perhitungan, dan `views` menyusun bentuk JSON.
 
 ---
 
-## 7. Bila ada masalah
+## 6. Bila ada masalah
 
-**`Modul "flask" tidak ditemukan` saat `python3 main.py`.**
-Virtualenv belum aktif. Jalankan `source ../.venv/bin/activate` lebih dulu,
-atau panggil interpreternya langsung: `../.venv/bin/python main.py`.
+**`Modul "flask" tidak ditemukan`.**
+Virtualenv belum aktif. Jalankan lewat interpreternya langsung:
+`../.venv/bin/python main.py`.
+
+**`Variabel lingkungan berikut belum diisi: DATABASE_URL, SECRET_KEY`.**
+`backend/.env` belum dibuat atau belum dilengkapi. Ulangi langkah 2.5.
 
 **`Porta 5000 sudah dipakai proses lain` (khusus macOS).**
-Porta 5000 kerap dipakai AirPlay Receiver bawaan sistem. Pilihan:
-matikan lewat Pengaturan Sistem → Umum → AirDrop & Handoff, atau pindahkan
-backend ke porta lain:
+Porta 5000 kerap dipakai AirPlay Receiver bawaan sistem. Pilih salah satu:
 
 ```bash
-python3 main.py --port 5001
+../.venv/bin/python main.py --port 5001
 ```
 
-Bila portanya diganti, sesuaikan juga `VITE_API_TARGET` di `frontend/.env`.
+atau matikan AirPlay Receiver di *System Settings → General → AirDrop &
+Handoff*.
 
-**Vite membalas 403 untuk `/api`.**
-Penyebabnya sama seperti di atas: `localhost` di macOS lebih dulu diarahkan ke
-`::1`, dan di sana porta 5000 dijawab AirPlay. Karena itu `VITE_API_TARGET`
-sengaja memakai `127.0.0.1`, bukan `localhost`.
+**Halaman membalas "Tampilan belum dibangun".**
+`npm run build` belum pernah dijalankan. Ulangi langkah 2.7.
 
-**`Variabel lingkungan berikut belum diisi`.**
-`backend/.env` belum dibuat, atau `DATABASE_URL` / `SECRET_KEY` masih kosong.
-Ulangi langkah 2.3.
-
-**`migrate.py` gagal karena tabel sudah ada.**
-Skema pernah dipasang manual tanpa lewat `migrate.py`, sehingga tabel
-`schema_migrations` kosong. Catat migrasi yang sudah terpasang:
-
-```sql
-INSERT INTO schema_migrations (nama)
-VALUES ('001_init.sql'), ('002_seed_wilayah.sql')
-ON CONFLICT (nama) DO NOTHING;
-```
-
-**Angka dashboard berbeda dari yang diharapkan.**
-Periksa `APP_TODAY` di `backend/.env` — kalau terisi, aplikasi memakai tanggal
-itu sebagai "hari ini". Untuk pemakaian normal, kosongkan.
-
-**Baris dengan jatuh tempo di masa depan tidak muncul.**
-Memang begitu. Baris dengan `tgl_jatuh_tempo_pkb` setelah hari ini hanya
-menandai bahwa plat tersebut sudah membayar, dan tidak ikut dihitung di
-dashboard maupun export.
+**Proxy membalas 403 saat memakai `npm run dev` (khusus macOS).**
+`VITE_API_TARGET` harus `http://127.0.0.1:5000`, bukan `localhost`. Di
+macOS `localhost` lebih dulu diarahkan ke `::1`, dan di sana porta 5000
+dijawab AirPlay.
 
 ---
 
-## 8. Catatan teknis
+## 7. Catatan teknis
 
-- **Tanpa ORM.** Seluruh akses database memakai SQL mentah lewat psycopg 3
-  dengan parameter. Query panjang disimpan di `backend/app/sql/`.
-- **Opsen PKB selalu diambil dari data**, tidak pernah dihitung sebagai
-  persentase dari PKB.
-- **Status lunas tidak berasal dari kolom di berkas.** Untuk setiap nomor
-  polisi, baris dengan jatuh tempo terbesar berstatus BELUM LUNAS; sisanya
-  LUNAS. Dihitung ulang setiap kali berkas disimpan.
-- **Tidak ada data yang dihapus.** Berkas baru memperbarui baris yang
-  kuncinya sudah ada dan menambah yang belum ada.
-- Untuk produksi jangan memakai `main.py`; pakai Gunicorn lewat `wsgi.py`
-  dengan timeout 120 detik:
-
-  ```bash
-  gunicorn --timeout 120 --chdir backend wsgi:app
-  ```
+- Satu baris data ditandai pasangan **nomor polisi + tanggal jatuh tempo
+  PKB**. Baris lama tidak pernah dihapus, hanya diperbarui.
+- Seluruh perhitungan hanya memakai baris yang tanggal jatuh temponya
+  **sudah lewat atau sama dengan hari ini**. Jatuh tempo di masa depan
+  tersimpan tetapi tidak ikut dihitung.
+- Nilai **Opsen PKB tidak pernah dihitung dari PKB**; angkanya diambil apa
+  adanya dari kolom di berkas pusat.
+- Tabel rincian selalu menampilkan **23 kelurahan**, termasuk yang
+  nilainya nol.
+- Akses database memakai **psycopg 3 dengan SQL mentah, tanpa ORM**. Nilai
+  selalu dikirim sebagai parameter, tidak pernah disambung ke teks SQL.
+- Seluruh halaman dan endpoint selain login mewajibkan sesi yang sah.
+- Cabang **`lengkap`** berisi versi yang sama ditambah 319 tes otomatis
+  beserta perkakas migrasi database.

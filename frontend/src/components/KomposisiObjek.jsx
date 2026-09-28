@@ -2,7 +2,7 @@ import { angka, persen } from '../format.js'
 
 /**
  * Komposisi objek per jumlah roda, dalam bentuk batang.
- * Roda 2 dan Roda 4 selalu tampil walau salah satunya 0 (bagian 12).
+ * Roda 2 dan Roda 4 selalu tampil walau salah satunya 0.
  */
 export default function KomposisiObjek({ data }) {
   const total = data.reduce((jumlah, d) => jumlah + d.objek, 0)

@@ -3,8 +3,6 @@
 
 Pemakaian:
     python scripts/buat_akun.py <username>
-
-Acuan: SPESIFIKASI_DASHBOARD_PKB.md bagian 14.
 """
 
 import getpass

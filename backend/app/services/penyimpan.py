@@ -3,8 +3,6 @@
 Gagal di tengah berarti tidak ada yang tersimpan sama sekali; data lama tetap
 utuh. Tidak ada baris yang dihapus — riwayat periode terbentuk sendiri dari
 akumulasi baris.
-
-Acuan: SPESIFIKASI_DASHBOARD_PKB.md bagian 6, 7.1, dan 10.3.
 """
 
 from dataclasses import dataclass

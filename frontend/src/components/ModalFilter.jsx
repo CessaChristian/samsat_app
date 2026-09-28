@@ -5,7 +5,7 @@ import Modal from './Modal.jsx'
 /**
  * Modal filter data: jenis kendaraan, status, kecamatan, dan kelurahan.
  *
- * Penyesuaian wajib terhadap prototipe (bagian 3): filter "Lokasi proses"
+ * Penyesuaian wajib terhadap prototipe: filter "Lokasi proses"
  * DIHAPUS PERMANEN — tidak ada kolom, parameter, maupun elemen UI untuk itu.
  *
  * Tiap kotak pilih dibungkus <label> supaya punya nama yang terbaca pembaca

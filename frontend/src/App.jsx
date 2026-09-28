@@ -6,7 +6,7 @@ import Login from './pages/Login.jsx'
 
 /**
  * Menentukan layar mana yang tampil berdasarkan ada tidaknya sesi.
- * Seluruh halaman dan endpoint selain login mewajibkan sesi (bagian 14).
+ * Seluruh halaman dan endpoint selain login mewajibkan sesi.
  */
 export default function App() {
   const [pengguna, setPengguna] = useState(null)

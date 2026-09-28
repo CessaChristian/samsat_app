@@ -5,8 +5,6 @@ periode, dan periode tidak pernah melewati ``hari_ini()``. Baris dengan jatuh
 tempo di masa depan hanya berfungsi sebagai penanda lunas.
 
 **Opsen tidak pernah dihitung dari PKB.** Nilainya selalu diambil dari data.
-
-Acuan: SPESIFIKASI_DASHBOARD_PKB.md bagian 7.2 dan 12.
 """
 
 from dataclasses import dataclass
@@ -79,7 +77,7 @@ def buat_filter(args: Mapping[str, str]) -> Filter:
     dari = _tanggal(teks_dari, "dari") if teks_dari else awal_data
     sampai = _tanggal(teks_sampai, "sampai") if teks_sampai else akhir_data
 
-    # Bagian 11: "sampai" yang melewati hari ini dipotong menjadi hari ini.
+    # "sampai" yang melewati hari ini dipotong menjadi hari ini.
     sampai = min(sampai, batas)
     if dari > sampai:
         dari = sampai

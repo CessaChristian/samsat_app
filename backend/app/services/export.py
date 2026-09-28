@@ -1,7 +1,8 @@
-"""Bagian bersama export Excel dan PDF (bagian 13).
+"""Bagian bersama export Excel dan PDF.
 
 Isi kedua export sama: seluruh baris detail yang lolos filter aktif, dengan
-21 kolom persis seperti bagian 4. Yang berbeda hanya cara menuliskannya.
+21 kolom yang sama dengan berkas dari pusat. Yang berbeda hanya cara
+menuliskannya.
 """
 
 from datetime import date
@@ -54,7 +55,7 @@ def tanggal_stnk(nilai) -> date | None:
 
     Bila bentuknya ``dd/mm/yyyy`` yang sah, kembalikan tanggalnya supaya bisa
     ditulis sebagai sel tanggal. Isi lain — misalnya "SEUMUR HIDUP" —
-    mengembalikan ``None`` dan ditulis apa adanya (bagian 13).
+    mengembalikan ``None`` dan ditulis apa adanya.
     """
     try:
         return ke_tanggal(nilai)

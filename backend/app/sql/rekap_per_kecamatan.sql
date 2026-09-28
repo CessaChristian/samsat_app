@@ -1,5 +1,5 @@
 -- Grafik PKB per kecamatan. Keempat kecamatan selalu tampil, termasuk yang
--- bernilai 0, supaya bentuk grafik tidak berubah-ubah (bagian 12).
+-- bernilai 0, supaya bentuk grafik tidak berubah-ubah.
 WITH dasar AS (
     SELECT k.wilayah_id, k.pkb_pokok, k.pkb_denda
       FROM kewajiban_pkb k

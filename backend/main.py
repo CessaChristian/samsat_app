@@ -7,10 +7,6 @@ sudah pernah dijalankan di folder frontend.
     python3 main.py                 # pakai HOST dan PORT dari backend/.env
     python3 main.py --port 5001     # timpa porta sekali jalan
     python3 main.py --tanpa-debug   # matikan muat ulang otomatis
-
-Untuk produksi jangan memakai berkas ini; pakai Gunicorn lewat ``wsgi.py``:
-
-    gunicorn --timeout 120 --chdir backend wsgi:app
 """
 
 import argparse
@@ -36,7 +32,7 @@ except ModuleNotFoundError as exc:
         "Kemungkinan virtualenv belum aktif. Coba salah satu:\n\n"
         "    source ../.venv/bin/activate && python3 main.py\n"
         "    ../.venv/bin/python main.py\n\n"
-        "Bila virtualenv belum dibuat, lihat README bagian 2."
+        "Bila virtualenv belum dibuat, lihat README."
     )
 
 

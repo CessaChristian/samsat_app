@@ -8,7 +8,7 @@ import { angka, persen, rupiah, rupiahRingkas } from '../format.js'
  * tengah.
  *
  * Angka tengah donut = objek hasil filter dibagi objek pada periode yang sama
- * tanpa filter roda/status/wilayah (bagian 12).
+ * tanpa filter roda/status/wilayah.
  */
 
 const WARNA_RODA = {

@@ -1,4 +1,4 @@
--- Baris detail untuk export Excel dan PDF (bagian 13).
+-- Baris detail untuk export Excel dan PDF.
 --
 -- Kolom dan namanya mengikuti ke-21 header berkas pusat. Dua di antaranya
 -- diambil dari dim_wilayah, yaitu nama kecamatan dan kelurahan yang sudah

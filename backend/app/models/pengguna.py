@@ -1,8 +1,6 @@
 """Akses data tabel ``pengguna``. SQL mentah, tanpa ORM.
 
 Tidak ada pendaftaran mandiri: akun dibuat lewat ``scripts/buat_akun.py``.
-
-Acuan: SPESIFIKASI_DASHBOARD_PKB.md bagian 14.
 """
 
 from flask_login import UserMixin

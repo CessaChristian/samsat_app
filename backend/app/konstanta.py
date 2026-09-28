@@ -1,18 +1,16 @@
 """Konstanta domain: header berkas pusat, master wilayah, dan kode pesan.
 
-Semuanya dikumpulkan di satu berkas karena spesifikasi bagian 4 mencatat
-bahwa **format header berkas pusat belum final** (menunggu keputusan atasan).
+Semuanya dikumpulkan di satu berkas karena **format header berkas pusat
+belum final** (menunggu keputusan atasan).
 Bila header berubah, hanya berkas ini yang perlu disunting.
-
-Acuan: SPESIFIKASI_DASHBOARD_PKB.md bagian 4, 5, 9, dan 18.
 """
 
 # ---------------------------------------------------------------------------
-# Header berkas Excel dari pusat (bagian 4)
+# Header berkas Excel dari pusat
 # ---------------------------------------------------------------------------
 
 #: Ke-21 nama header, urut seperti berkas acuan. Urutan kolom di berkas yang
-#: diunggah boleh berbeda; urutan di sini dipakai untuk export (bagian 13).
+#: diunggah boleh berbeda; urutan di sini dipakai untuk export.
 HEADER_WAJIB: tuple[str, ...] = (
     "no_polisi",
     "nama",
@@ -37,10 +35,10 @@ HEADER_WAJIB: tuple[str, ...] = (
     "TOTAL",
 )
 
-#: Wajib terisi. Nilai 0 diperbolehkan, kosong ditolak (bagian 9.A.6a).
+#: Wajib terisi. Nilai 0 diperbolehkan, kosong ditolak.
 KOLOM_NILAI_INTI: tuple[str, ...] = ("PKB Pokok", "PKB Opsen", "SWDKLLJ")
 
-#: Boleh kosong; saat menyimpan diisi 0 dengan peringatan (bagian 9.B).
+#: Boleh kosong; saat menyimpan diisi 0 dengan peringatan.
 KOLOM_DENDA_BOLEH_KOSONG: tuple[str, ...] = (
     "PKB Denda",
     "PKB Denda Opsen",
@@ -49,7 +47,7 @@ KOLOM_DENDA_BOLEH_KOSONG: tuple[str, ...] = (
 )
 
 #: Kolom yang dijumlahkan untuk menghitung ulang TOTAL bila sel TOTAL kosong
-#: atau tidak terbaca (bagian 4, kolom 14–20).
+#: atau tidak terbaca (kolom 14–20).
 KOLOM_PENJUMLAH_TOTAL: tuple[str, ...] = (
     "PKB Pokok",
     "PKB Denda",
@@ -60,19 +58,19 @@ KOLOM_PENJUMLAH_TOTAL: tuple[str, ...] = (
     "PNBP",
 )
 
-#: Teks yang dianggap kosong pada pemeriksaan isi sel (bagian 9.A).
+#: Teks yang dianggap kosong pada pemeriksaan isi sel.
 TEKS_KOSONG: frozenset[str] = frozenset({"", "-", "--"})
 
 
 # ---------------------------------------------------------------------------
-# Master wilayah Kota Salatiga (bagian 5)
+# Master wilayah Kota Salatiga
 # ---------------------------------------------------------------------------
 
 KECAMATAN: tuple[str, ...] = ("ARGOMULYO", "SIDOMUKTI", "SIDOREJO", "TINGKIR")
 
 #: Sumber kebenaran pasangan kelurahan–kecamatan.
 #:
-#: Dua jebakan yang dicatat spesifikasi:
+#: Dua hal yang mudah keliru:
 #:   * SIDOREJO KIDUL berada di Kecamatan TINGKIR, bukan SIDOREJO.
 #:   * SALATIGA adalah nama kelurahan di Kecamatan SIDOREJO.
 KELURAHAN_KE_KECAMATAN: dict[str, str] = {
@@ -107,7 +105,7 @@ KELURAHAN_KE_KECAMATAN: dict[str, str] = {
 
 
 # ---------------------------------------------------------------------------
-# Kode kesalahan yang menolak berkas (bagian 9.A)
+# Kode kesalahan yang menolak berkas
 # ---------------------------------------------------------------------------
 
 HEADER_KOLOM_HILANG = "HEADER_KOLOM_HILANG"
@@ -123,14 +121,14 @@ NILAI_INTI_TIDAK_VALID = "NILAI_INTI_TIDAK_VALID"
 NILAI_DENDA_TIDAK_VALID = "NILAI_DENDA_TIDAK_VALID"
 BARIS_KEMBAR = "BARIS_KEMBAR"
 
-# Kesalahan tingkat berkas, bukan isi (bagian 11).
+# Kesalahan tingkat berkas, bukan isi.
 BERKAS_TIDAK_TERBACA = "BERKAS_TIDAK_TERBACA"
 FORMAT_TIDAK_DIDUKUNG = "FORMAT_TIDAK_DIDUKUNG"
 BERKAS_TERLALU_BESAR = "BERKAS_TERLALU_BESAR"
 
 
 # ---------------------------------------------------------------------------
-# Kode penyesuaian otomatis, berkas tetap diterima (bagian 9.B)
+# Kode penyesuaian otomatis, berkas tetap diterima
 # ---------------------------------------------------------------------------
 
 RODA_DIUBAH_KE_2 = "RODA_DIUBAH_KE_2"
@@ -140,7 +138,7 @@ BERKAS_PERNAH_DISIMPAN = "BERKAS_PERNAH_DISIMPAN"
 
 
 # ---------------------------------------------------------------------------
-# Ambang saran ejaan untuk nama wilayah yang tidak dikenal (bagian 9.A)
+# Ambang saran ejaan untuk nama wilayah yang tidak dikenal
 # ---------------------------------------------------------------------------
 
 JARAK_SARAN_MAKS = 3

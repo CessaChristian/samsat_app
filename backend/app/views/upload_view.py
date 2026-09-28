@@ -2,8 +2,6 @@
 
 Memisahkan bentuk API dari logika validasi: validator menghasilkan objek
 Python, berkas ini yang memutuskan seperti apa JSON-nya.
-
-Acuan: SPESIFIKASI_DASHBOARD_PKB.md bagian 11 (Unggah).
 """
 
 from datetime import date, datetime
@@ -84,5 +82,5 @@ def susun_hasil_cek(
 
 
 def kesalahan_berkas(kode: str, pesan: str) -> dict:
-    """Kesalahan tingkat berkas, bukan isi (bagian 11)."""
+    """Kesalahan tingkat berkas, bukan isi."""
     return {"kode": kode, "pesan": pesan}

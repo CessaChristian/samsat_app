@@ -1,6 +1,4 @@
 """Controller /api/rekap: satu respons untuk seluruh isi dashboard.
-
-Acuan: SPESIFIKASI_DASHBOARD_PKB.md bagian 11 (Rekap) dan 12.
 """
 
 from flask import Blueprint, jsonify, request

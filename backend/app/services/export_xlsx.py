@@ -1,4 +1,4 @@
-"""Export Excel (bagian 13).
+"""Export Excel.
 
 openpyxl mode write-only: baris dikirim langsung ke berkas dan tidak
 ditumpuk di memori, jadi export ribuan baris tetap hemat.

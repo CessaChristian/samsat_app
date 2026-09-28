@@ -1,6 +1,4 @@
 """Pabrik aplikasi Flask.
-
-Acuan: SPESIFIKASI_DASHBOARD_PKB.md bagian 15.
 """
 
 from pathlib import Path

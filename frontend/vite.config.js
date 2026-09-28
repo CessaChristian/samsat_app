@@ -3,7 +3,6 @@ import react from '@vitejs/plugin-react'
 
 // Porta dan alamat backend dibaca dari frontend/.env supaya tidak perlu
 // menyunting berkas konfigurasi saat pindah lingkungan.
-// Acuan: SPESIFIKASI_DASHBOARD_PKB.md bagian 15.
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
 

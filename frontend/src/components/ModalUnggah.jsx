@@ -6,7 +6,7 @@ import { BATAS_BERKAS_MB, HEADER_WAJIB, KESALAHAN_DITAMPILKAN } from '../konstan
 import { IkonUnggah } from './Ikon.jsx'
 
 /**
- * Modal unggah dengan alur Cek File -> Simpan (bagian 8).
+ * Modal unggah dengan alur Cek File -> Simpan.
  *
  * Tahapan:
  *   kosong    pilih berkas
@@ -17,7 +17,7 @@ import { IkonUnggah } from './Ikon.jsx'
  *   gagal     panel merah berisi daftar kesalahan, Simpan nonaktif
  *   menyimpan permintaan ke /api/upload/commit sedang berjalan
  *
- * Penyesuaian wajib terhadap prototipe (bagian 3):
+ * Penyesuaian wajib terhadap prototipe:
  *   - daftar kolom wajib memakai ke-21 header yang sebenarnya
  *   - kotak kuning dipakai untuk penyesuaian otomatis, bukan "baris dilewati"
  *   - petunjuk tanggal memakai dd/mm/yyyy
@@ -36,7 +36,7 @@ export default function ModalUnggah({ onTutup, onTersimpan }) {
 
   function pilihUlang(berkasBaru) {
     // "Ganti berkas" membuang token lama; Simpan kembali nonaktif sampai
-    // Cek File dijalankan lagi (bagian 8 butir 4).
+    // Cek File dijalankan lagi.
     setBerkas(berkasBaru)
     setHasil(null)
     setGalatBerkas(null)

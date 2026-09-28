@@ -1,6 +1,4 @@
 """Controller /api/meta: keterangan yang dibutuhkan dashboard saat dimuat.
-
-Acuan: SPESIFIKASI_DASHBOARD_PKB.md bagian 11 (Meta).
 """
 
 from flask import Blueprint, jsonify

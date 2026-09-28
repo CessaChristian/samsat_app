@@ -1,6 +1,4 @@
 """Controller autentikasi: /api/auth/login, /logout, /me.
-
-Acuan: SPESIFIKASI_DASHBOARD_PKB.md bagian 11 (Auth) dan 14 (Login).
 """
 
 from flask import Blueprint, jsonify, request

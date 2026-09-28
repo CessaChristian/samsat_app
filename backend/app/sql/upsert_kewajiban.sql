@@ -1,6 +1,6 @@
 -- Satu baris = satu kewajiban pajak, dikunci (no_polisi, tgl_jatuh_tempo_pkb).
 -- Kunci yang sudah ada diperbarui seluruh kolomnya; kunci baru ditambahkan.
--- Tidak ada baris yang dihapus (bagian 6).
+-- Tidak ada baris yang dihapus.
 INSERT INTO kewajiban_pkb (
     no_polisi, tgl_jatuh_tempo_pkb, wilayah_id, jml_roda,
     pkb_pokok, pkb_denda, pkb_opsen, pkb_denda_opsen, swdkllj, denda_swdkllj,
